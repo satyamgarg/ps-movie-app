@@ -68,7 +68,6 @@ class MovieDetailScreenTest {
                     overview = "overview",
                     posterPath = "posterPath",
                     backdropPath = "backdropPath",
-                    releaseDate = "releaseDate",
                     voteAverage = 1.0,
                     voteCount = 1,
                 ),
