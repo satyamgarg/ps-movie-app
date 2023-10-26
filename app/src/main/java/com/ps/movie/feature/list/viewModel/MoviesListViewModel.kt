@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.domain.usecase.MovieListUseCase
 import com.ps.domain.utils.NetworkResponse
+import com.ps.movie.feature.MovieAction
 import com.ps.movie.feature.MovieIntent
 import com.ps.movie.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,40 +26,58 @@ class MoviesListViewModel @Inject constructor(
 
     val channel = Channel<MovieIntent>()
 
-    private val _moviesListEvent = MutableStateFlow<MovieListEvents>(MovieListEvents.Loading)
-    val movieListEvent: StateFlow<MovieListEvents> get() = _moviesListEvent
+    private val _moviesListState = MutableStateFlow<MovieListState>(MovieListState.Void)
+    val movieListState: StateFlow<MovieListState> get() = _moviesListState
 
-    init {
-        handleChannelEvent()
-    }
-
-    private fun handleChannelEvent() {
-        viewModelScope.launch {
-            channel.consumeAsFlow().collect { movieIntent ->
-                when (movieIntent) {
-                    is MovieIntent.GetMovies -> {
-                        getMoviesList()
-                    }
-                    else -> Unit
-                }
+    fun initializeIntentHandler() {
+        launchOnUI {
+            channel.consumeAsFlow().collect { intent ->
+                handleUIAction(intentToAction(intent))
             }
         }
     }
 
+    private fun handleUIAction(intentToAction: MovieAction) {
+        when (intentToAction) {
+            is MovieAction.GetMovieList -> {
+                getMoviesList()
+            }
+            else -> Unit
+        }
+    }
+
+    private fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
+        viewModelScope.launch { block() }
+    }
+
+    private fun intentToAction(intent: MovieIntent): MovieAction {
+        return when (intent) {
+            is MovieIntent.GetMovies -> MovieAction.GetMovieList
+            else -> MovieAction.None
+        }
+    }
     fun getMoviesList() {
-        _moviesListEvent.value = MovieListEvents.Loading
+        _moviesListState.value = MovieListState.Loading
         viewModelScope.launch(coroutineDispatcher) {
             when (val response = movieListUseCase.getMoviesList()) {
                 is NetworkResponse.Success -> {
-                    _moviesListEvent.emit(MovieListEvents.OnMovieListSuccess(response.data))
+                    _moviesListState.emit(MovieListState.OnMovieListSuccess(response.data))
                 }
 
                 is NetworkResponse.Error -> {
-                    _moviesListEvent.emit(MovieListEvents.OnMovieListFailure(response.errorMessage ?: Constants.SERVER_ERROR))
+                    _moviesListState.emit(
+                        MovieListState.OnMovieListFailure(
+                            response.errorMessage ?: Constants.SERVER_ERROR,
+                        ),
+                    )
                 }
 
                 is NetworkResponse.Exception -> {
-                    _moviesListEvent.emit(MovieListEvents.OnMovieListFailure(response.errorMessage ?: Constants.SERVER_ERROR))
+                    _moviesListState.emit(
+                        MovieListState.OnMovieListFailure(
+                            response.errorMessage ?: Constants.SERVER_ERROR,
+                        ),
+                    )
                 }
 
                 else -> {}

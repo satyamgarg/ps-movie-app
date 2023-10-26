@@ -10,4 +10,3 @@ open class MovieDetailsUseCase @Inject constructor(private val movieRepository: 
         return movieRepository.getMovieDetails(movieId = movieId)
     }
 }
-

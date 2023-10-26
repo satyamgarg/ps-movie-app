@@ -8,13 +8,11 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
+import com.ps.data.di.NetworkModule
 import com.ps.domain.modal.MovieResult
 import com.ps.movie.MovieActivity
-import com.ps.movie.di.NetworkModule
-import com.ps.movie.di.TestDispatcherModule
 import com.ps.movie.di.TestRepositoryModule
 import com.ps.movie.di.TestUseCaseModule
-import com.ps.movie.di.TestViewModelModule
 import com.ps.movie.util.TestTags
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -26,10 +24,8 @@ import org.junit.Test
 @HiltAndroidTest
 @UninstallModules(
     NetworkModule::class,
-    TestDispatcherModule::class,
     TestRepositoryModule::class,
     TestUseCaseModule::class,
-    TestViewModelModule::class,
 )
 class MovieListScreenKtTest {
 

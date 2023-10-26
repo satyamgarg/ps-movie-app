@@ -1,13 +1,9 @@
-package com.ps.movie.usecase
+package com.ps.domain.usecase
 
-import app.cash.turbine.test
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.domain.repository.MovieRepository
-import com.ps.domain.usecase.MovieDetailsUseCase
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
-import com.ps.movie.feature.details.viewModel.MovieDetailEvent
-import com.ps.movie.feature.details.viewModel.MoviesDetailViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -34,19 +30,12 @@ class MovieDetailsUseCaseTest {
 
     private val coroutineTestDispatcher = StandardTestDispatcher()
 
-    private lateinit var viewModel: MoviesDetailViewModel
-
     private lateinit var movieDetailsUseCase: MovieDetailsUseCase
 
     @Before
     fun setUp() {
         Dispatchers.setMain(coroutineTestDispatcher)
         MockKAnnotations.init(this)
-
-        viewModel = MoviesDetailViewModel(
-            movieDetailsUseCase = MovieDetailsUseCase(movieRepository),
-            coroutineDispatcher = coroutineTestDispatcher,
-        )
 
         movieDetailsUseCase = MovieDetailsUseCase(movieRepository)
     }
@@ -60,16 +49,8 @@ class MovieDetailsUseCaseTest {
             movieDetailsUseCase.getMovieDetails(1)
         } returns mockResponse
 
-        viewModel.getMovieDetails(1)
-
         runTest {
-            viewModel.movieDetailsEvent.test {
-                val result = awaitItem()
-                if (result is MovieDetailEvent.OnMovieDetailSuccess) {
-                    assert(result.response != null)
-                    awaitComplete()
-                }
-            }
+            assert(movieDetailsUseCase.getMovieDetails(1) is NetworkResponse.Success)
         }
     }
 
@@ -79,16 +60,8 @@ class MovieDetailsUseCaseTest {
             movieDetailsUseCase.getMovieDetails(1)
         } returns NetworkResponse.Error(Constants.EMPTY_LIST)
 
-        viewModel.getMovieDetails(1)
-
         runTest {
-            viewModel.movieDetailsEvent.test {
-                val result = awaitItem()
-                if (result is MovieDetailEvent.OnMovieDetailFailure) {
-                    assert(result.message == Constants.EMPTY_LIST)
-                    awaitComplete()
-                }
-            }
+            assert(movieDetailsUseCase.getMovieDetails(1) is NetworkResponse.Error)
         }
     }
 
@@ -98,16 +71,8 @@ class MovieDetailsUseCaseTest {
             movieDetailsUseCase.getMovieDetails(1)
         } returns NetworkResponse.Exception(UnknownHostException(Constants.UNKNOWN_ERROR))
 
-        viewModel.getMovieDetails(1)
-
         runTest {
-            viewModel.movieDetailsEvent.test {
-                val result = awaitItem()
-                if (result is MovieDetailEvent.OnMovieDetailFailure) {
-                    assert(result.message == Constants.UNKNOWN_ERROR)
-                    awaitComplete()
-                }
-            }
+            assert(movieDetailsUseCase.getMovieDetails(1) is NetworkResponse.Exception)
         }
     }
 }

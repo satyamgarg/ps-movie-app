@@ -6,7 +6,7 @@ import com.ps.domain.repository.MovieRepository
 import com.ps.domain.usecase.MovieDetailsUseCase
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
-import com.ps.movie.feature.details.viewModel.MovieDetailEvent
+import com.ps.movie.feature.details.viewModel.MovieDetailState
 import com.ps.movie.feature.details.viewModel.MoviesDetailViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -56,9 +56,9 @@ class MovieDetailsViewModelTest {
         viewModel.getMovieDetails(1)
 
         runTest {
-            viewModel.movieDetailsEvent.test {
+            viewModel.movieDetailsState.test {
                 val result = awaitItem()
-                if (result is MovieDetailEvent.OnMovieDetailSuccess) {
+                if (result is MovieDetailState.OnMovieDetailSuccess) {
                     assert(result.response != null)
                     awaitComplete()
                 }
@@ -75,9 +75,9 @@ class MovieDetailsViewModelTest {
         viewModel.getMovieDetails(1)
 
         runTest {
-            viewModel.movieDetailsEvent.test {
+            viewModel.movieDetailsState.test {
                 val result = awaitItem()
-                if (result is MovieDetailEvent.OnMovieDetailFailure) {
+                if (result is MovieDetailState.OnMovieDetailFailure) {
                     assert(result.message == Constants.EMPTY_LIST)
                     awaitComplete()
                 }
@@ -94,9 +94,9 @@ class MovieDetailsViewModelTest {
         viewModel.getMovieDetails(1)
 
         runTest {
-            viewModel.movieDetailsEvent.test {
+            viewModel.movieDetailsState.test {
                 val result = awaitItem()
-                if (result is MovieDetailEvent.OnMovieDetailFailure) {
+                if (result is MovieDetailState.OnMovieDetailFailure) {
                     assert(result.message == Constants.EMPTY_LIST)
                     awaitComplete()
                 }

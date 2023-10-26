@@ -52,7 +52,14 @@ dependencies {
     api(libs.core.ktx)
     api(libs.hilt.android)
     ksp(libs.hilt.compiler)
-
+    api(libs.hilt.navigation)
+    api(libs.moshi.kotlin)
     api(libs.bundles.retrofit)
     ksp(libs.moshi.codegen)
+
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.junit)
+    testImplementation(libs.test.mock)
+    testImplementation(libs.test.coroutines)
+    testImplementation(libs.test.core)
 }

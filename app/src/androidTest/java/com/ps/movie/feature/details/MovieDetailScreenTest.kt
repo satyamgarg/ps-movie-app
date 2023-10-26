@@ -1,19 +1,16 @@
 package com.ps.movie.feature.details
 
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.unit.dp
+import com.ps.data.di.NetworkModule
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.movie.MovieActivity
-import com.ps.movie.di.NetworkModule
-import com.ps.movie.di.TestDispatcherModule
 import com.ps.movie.di.TestRepositoryModule
 import com.ps.movie.di.TestUseCaseModule
-import com.ps.movie.di.TestViewModelModule
+import com.ps.movie.feature.common.DisplayTitle
 import com.ps.movie.util.TestTags
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -25,10 +22,8 @@ import org.junit.Test
 @HiltAndroidTest
 @UninstallModules(
     NetworkModule::class,
-    TestDispatcherModule::class,
     TestRepositoryModule::class,
     TestUseCaseModule::class,
-    TestViewModelModule::class,
 )
 class MovieDetailScreenTest {
 
@@ -71,13 +66,11 @@ class MovieDetailScreenTest {
                     voteAverage = 1.0,
                     voteCount = 1,
                 ),
-                paddingValues = PaddingValues(10.dp),
             )
         }
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_OVERVIEW).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_VOTE).assertIsDisplayed()
-        composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_RELEASE_DATE).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_VOTE).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_RATING).assertIsDisplayed()
     }

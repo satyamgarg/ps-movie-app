@@ -35,6 +35,8 @@ coroutinesTest = "1.6.4"
 coretesting = "2.1.0"
 daggerHilt = "2.48"
 testTurbine = "0.12.1"
+appcompat = "1.6.1"
+material = "1.10.0"
 
 [libraries]
 # Android Core
@@ -85,6 +87,8 @@ test-core = {module = "androidx.arch.core:core-testing", version.ref = "coretest
 test-hilt-android = {module = "com.google.dagger:hilt-android-testing", version.ref = "daggerHilt"}
 test-hilt-android-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt"}
 test-turbine = {module = " app.cash.turbine:turbine", version.ref = "testTurbine"}
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [bundles]
 androidx-compose-bom = ["compose-bom", "ui-tooling", "compose-ui", "compose-ui-graphics", "compose-tooling-preview", "androidx-material3"]

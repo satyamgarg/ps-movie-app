@@ -6,73 +6,49 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieResult
 import com.ps.movie.R
 import com.ps.movie.feature.MovieIntent
+import com.ps.movie.feature.common.MovieAppBar
 import com.ps.movie.feature.common.MovieBanner
-import com.ps.movie.feature.list.viewModel.MovieListEvents
+import com.ps.movie.feature.list.viewModel.MovieListState
 import com.ps.movie.feature.list.viewModel.MoviesListViewModel
 import com.ps.movie.util.Constants
 import com.ps.movie.util.TestTags
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieListScreen(
     viewModel: MoviesListViewModel = hiltViewModel(),
     onMovieClick: (MovieResult) -> Unit,
 ) {
-    var movieList by remember { mutableStateOf(emptyList<MovieResult>()) }
-    var message by remember { mutableStateOf("") }
+    val mutableMovieList = remember { mutableStateOf<List<MovieResult>>(emptyList()) }
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.channel.send(MovieIntent.GetMovies)
-        viewModel.movieListEvent.collect { event ->
-            when (event) {
-                is MovieListEvents.OnMovieListSuccess -> {
-                    movieList = event.response?.results ?: emptyList()
-                }
-
-                is MovieListEvents.OnMovieListFailure -> {
-                    message = event.message
-                }
-
-                else -> Unit
-            }
+        if (mutableMovieList.value.isEmpty()) {
+            viewModel.initializeIntentHandler()
+            viewModel.channel.send(MovieIntent.GetMovies)
         }
     })
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        modifier = Modifier.testTag(TestTags.MOVIE_LIST_TITLE),
-                        text = stringResource(id = R.string.movie_list),
-                        color = Color.White,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
+            MovieAppBar(
+                title = stringResource(id = R.string.movie_list),
+                tagName = TestTags.MOVIE_LIST_TITLE,
+                isBackEnabled = false,
+                onBackClick = {},
             )
         },
     ) { paddingValues ->
@@ -80,10 +56,18 @@ fun MovieListScreen(
             modifier = Modifier
                 .padding(paddingValues),
         ) {
-            if (movieList.isEmpty()) {
-                Text(modifier = Modifier.padding(10.dp), text = message,)
-            } else {
-                DisplayMovieList(results = movieList, onMovieClick = onMovieClick)
+            when (val state = viewModel.movieListState.collectAsStateWithLifecycle().value) {
+                is MovieListState.OnMovieListSuccess -> {
+                    val movieList = state.response?.results ?: emptyList()
+                    mutableMovieList.value = movieList
+                    DisplayMovieList(results = mutableMovieList.value, onMovieClick = onMovieClick)
+                }
+
+                is MovieListState.OnMovieListFailure -> {
+                    Text(modifier = Modifier.padding(10.dp), text = state.message)
+                }
+
+                else -> Unit
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.ps.data.dto
 
+import com.ps.domain.mapper.Mapper
 import com.ps.domain.modal.MovieResult
-import com.ps.domain.utils.Mapper
 import com.squareup.moshi.Json
 
 data class MovieResultDto(
@@ -56,4 +56,3 @@ data class MovieResultDto(
         title = title,
     )
 }
-

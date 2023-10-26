@@ -1,24 +1,15 @@
 package com.ps.movie.feature.details
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,102 +23,80 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.domain.modal.MovieResult
 import com.ps.movie.R
 import com.ps.movie.feature.MovieIntent
+import com.ps.movie.feature.common.MovieAppBar
 import com.ps.movie.feature.common.MovieBanner
-import com.ps.movie.feature.details.viewModel.MovieDetailEvent
+import com.ps.movie.feature.details.viewModel.MovieDetailState
 import com.ps.movie.feature.details.viewModel.MoviesDetailViewModel
 import com.ps.movie.util.Constants
 import com.ps.movie.util.MoshiParser
 import com.ps.movie.util.TestTags
+import com.ps.movie.util.safeDouble
+import com.ps.movie.util.safeLong
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailScreen(movieObj: String, onBackPressed: () -> Unit) {
     val moviesDetailViewModel: MoviesDetailViewModel = hiltViewModel()
     val movie = MoshiParser().fromJson<MovieResult>(movieObj, MovieResult::class.java)
     var movieDetails by remember { mutableStateOf(MovieDetailResponse()) }
-    var message by remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = Unit, block = {
-        val moviePartially = MovieDetailResponse(
-            id = movie?.id,
-            posterPath = movie?.posterPath,
-            overview = movie?.overview,
-        )
-        movieDetails = moviePartially
-        movieDetails.id?.let { movieId ->
+        movie?.id?.let { movieId ->
+            moviesDetailViewModel.initializeIntentHandler()
+            val availableDetails = MovieDetailResponse(
+                id = movie.id,
+                posterPath = movie.posterPath,
+                overview = movie.overview,
+            )
+            movieDetails = availableDetails
+            moviesDetailViewModel.channel.send(MovieIntent.DisplayAvailableDetails(availableDetails))
             moviesDetailViewModel.channel.send(MovieIntent.GetMovieDetails(movieId = movieId))
         } ?: run { onBackPressed() }
+    })
 
-        moviesDetailViewModel.movieDetailsEvent.collect { event ->
-            when (event) {
-                is MovieDetailEvent.OnMovieDetailSuccess -> {
-                    event.response?.let { movieDetails = it }
+    Scaffold(
+        topBar = {
+            MovieAppBar(
+                title = movie?.title.orEmpty(),
+                tagName = TestTags.MOVIE_DETAIL_BACK_BUTTON,
+                isBackEnabled = true,
+                onBackClick = { onBackPressed.invoke() },
+            )
+        },
+    ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            when (
+                val state =
+                    moviesDetailViewModel.movieDetailsState.collectAsStateWithLifecycle().value
+            ) {
+                is MovieDetailState.OnMovieDetailSuccess -> {
+                    DisplayMovieDetails(
+                        movie = state.response ?: movieDetails,
+                    )
                 }
 
-                is MovieDetailEvent.OnMovieDetailFailure -> {
-                    event.message?.let { message = it }
+                is MovieDetailState.OnMovieDetailFailure -> {
+                    Text(modifier = Modifier.padding(10.dp), text = state.message.toString())
                 }
 
                 else -> Unit
             }
         }
-    })
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    DisplayTitle(movie?.title.orEmpty())
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = stringResource(id = R.string.app_name),
-                            tint = Color.White,
-                            modifier = Modifier.testTag(TestTags.MOVIE_DETAIL_BACK_BUTTON),
-                        )
-                    }
-                },
-            )
-        },
-    ) { paddingValues ->
-        if (movieDetails.overview?.isNotEmpty() == true) {
-            DisplayMovieDetails(paddingValues = paddingValues, movie = movieDetails)
-        } else {
-            Text(modifier = Modifier.padding(10.dp), text = message)
-        }
     }
 }
 
 @Composable
-fun DisplayTitle(title: String) {
-    Text(
-        modifier = Modifier.testTag(TestTags.MOVIE_DETAIL_TITLE),
-        text = title.ifEmpty { stringResource(id = R.string.app_name) },
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        color = Color.White,
-        fontSize = 22.sp,
-        fontWeight = FontWeight.Bold,
-    )
-}
-
-@Composable
-fun DisplayMovieDetails(paddingValues: PaddingValues, movie: MovieDetailResponse?) {
+fun DisplayMovieDetails(movie: MovieDetailResponse?) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
-            .padding(paddingValues)
             .verticalScroll(state = scrollState)
             .testTag(TestTags.MOVIE_DETAIL),
     ) {
@@ -162,26 +131,24 @@ fun DisplayMovieDetails(paddingValues: PaddingValues, movie: MovieDetailResponse
         }
 
         Row {
-            if (movie?.voteAverage != null) {
-                Text(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .align(Alignment.CenterVertically)
-                        .testTag(TestTags.MOVIE_DETAIL_RATING),
-                    text = "${stringResource(id = R.string.rating)}\n${movie.voteAverage}",
-                    color = Color.White,
-                )
-            }
+            val rating = movie?.voteAverage?.safeDouble()
+            Text(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .align(Alignment.CenterVertically)
+                    .testTag(TestTags.MOVIE_DETAIL_RATING),
+                text = "${stringResource(id = R.string.rating)}\n $rating",
+                color = Color.White,
+            )
 
-            if (movie?.voteCount != null) {
-                Text(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .testTag(TestTags.MOVIE_DETAIL_VOTE),
-                    text = "${stringResource(id = R.string.vote)}\n${movie.voteCount}",
-                    color = colorResource(id = R.color.off_white),
-                )
-            }
+            val voteCount = movie?.voteCount?.safeLong()
+            Text(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .testTag(TestTags.MOVIE_DETAIL_VOTE),
+                text = "${stringResource(id = R.string.vote)}\n$voteCount",
+                color = colorResource(id = R.color.off_white),
+            )
         }
 
         if (movie?.productionCompanies?.isNotEmpty() == true) {
