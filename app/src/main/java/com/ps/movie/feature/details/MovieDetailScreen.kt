@@ -2,7 +2,6 @@ package com.ps.movie.feature.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -46,7 +45,6 @@ import com.ps.movie.util.safeLong
 fun MovieDetailScreen(movieObj: String, onBackPressed: () -> Unit) {
     val moviesDetailViewModel: MoviesDetailViewModel = hiltViewModel()
     val movie = MoshiParser().fromJson<MovieResult>(movieObj, MovieResult::class.java)
-    val message by remember { mutableStateOf("") }
     var movieDetails by remember { mutableStateOf(MovieDetailResponse()) }
 
     LaunchedEffect(key1 = Unit, block = {
@@ -80,13 +78,12 @@ fun MovieDetailScreen(movieObj: String, onBackPressed: () -> Unit) {
             ) {
                 is MovieDetailState.OnMovieDetailSuccess -> {
                     DisplayMovieDetails(
-                        paddingValues = paddingValues,
                         movie = state.response ?: movieDetails,
                     )
                 }
 
                 is MovieDetailState.OnMovieDetailFailure -> {
-                    Text(modifier = Modifier.padding(10.dp), text = message)
+                    Text(modifier = Modifier.padding(10.dp), text = state.message.toString())
                 }
 
                 else -> Unit
@@ -96,12 +93,10 @@ fun MovieDetailScreen(movieObj: String, onBackPressed: () -> Unit) {
 }
 
 @Composable
-fun DisplayMovieDetails(paddingValues: PaddingValues, movie: MovieDetailResponse?) {
+fun DisplayMovieDetails(movie: MovieDetailResponse?) {
     val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
-            .padding(paddingValues)
             .verticalScroll(state = scrollState)
             .testTag(TestTags.MOVIE_DETAIL),
     ) {

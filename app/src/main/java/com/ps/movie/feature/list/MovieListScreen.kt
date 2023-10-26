@@ -6,15 +6,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -36,14 +33,13 @@ fun MovieListScreen(
     viewModel: MoviesListViewModel = hiltViewModel(),
     onMovieClick: (MovieResult) -> Unit,
 ) {
-    var movieList by remember { mutableStateOf(emptyList<MovieResult>()) }
-    var message by remember { mutableStateOf("") }
-
-    val lazyListState = rememberLazyListState()
+    val mutableMovieList = remember { mutableStateOf<List<MovieResult>>(emptyList()) }
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.initializeIntentHandler()
-        viewModel.channel.send(MovieIntent.GetMovies)
+        if (mutableMovieList.value.isEmpty()) {
+            viewModel.initializeIntentHandler()
+            viewModel.channel.send(MovieIntent.GetMovies)
+        }
     })
 
     Scaffold(
@@ -62,16 +58,13 @@ fun MovieListScreen(
         ) {
             when (val state = viewModel.movieListState.collectAsStateWithLifecycle().value) {
                 is MovieListState.OnMovieListSuccess -> {
-                    movieList = state.response?.results ?: emptyList()
-                    if (movieList.isEmpty()) {
-                        Text(modifier = Modifier.padding(10.dp), text = message)
-                    } else {
-                        DisplayMovieList(results = movieList, onMovieClick = onMovieClick)
-                    }
+                    val movieList = state.response?.results ?: emptyList()
+                    mutableMovieList.value = movieList
+                    DisplayMovieList(results = mutableMovieList.value, onMovieClick = onMovieClick)
                 }
 
                 is MovieListState.OnMovieListFailure -> {
-                    message = state.message
+                    Text(modifier = Modifier.padding(10.dp), text = state.message)
                 }
 
                 else -> Unit
@@ -83,7 +76,6 @@ fun MovieListScreen(
 @Composable
 fun DisplayMovieList(results: List<MovieResult>?, onMovieClick: (MovieResult) -> Unit) {
     LazyColumn(
-        state = rememberLazyListState(),
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()

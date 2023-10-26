@@ -1,15 +1,13 @@
 package com.ps.movie.feature.details
 
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.unit.dp
+import com.ps.data.di.NetworkModule
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.movie.MovieActivity
-import com.ps.data.di.NetworkModule
 import com.ps.movie.di.TestRepositoryModule
 import com.ps.movie.di.TestUseCaseModule
 import com.ps.movie.feature.common.DisplayTitle
@@ -68,7 +66,6 @@ class MovieDetailScreenTest {
                     voteAverage = 1.0,
                     voteCount = 1,
                 ),
-                paddingValues = PaddingValues(10.dp),
             )
         }
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL).assertIsDisplayed()
