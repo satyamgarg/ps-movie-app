@@ -8,9 +8,9 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
+import com.ps.data.di.NetworkModule
 import com.ps.domain.modal.MovieResult
 import com.ps.movie.MovieActivity
-import com.ps.data.di.NetworkModule
 import com.ps.movie.di.TestRepositoryModule
 import com.ps.movie.di.TestUseCaseModule
 import com.ps.movie.util.TestTags

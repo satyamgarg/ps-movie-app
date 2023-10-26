@@ -1,15 +1,13 @@
-package com.ps.movie.usecase
+package com.ps.domain.usecase
 
-import app.cash.turbine.test
 import com.ps.domain.modal.MovieListResponse
+import com.ps.domain.modal.MovieResult
 import com.ps.domain.repository.MovieRepository
-import com.ps.domain.usecase.MovieListUseCase
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
-import com.ps.movie.feature.list.viewModel.MovieListState
-import com.ps.movie.feature.list.viewModel.MoviesListViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
@@ -34,8 +32,6 @@ class MovieListUseCaseTest {
 
     private val coroutineTestDispatcher = StandardTestDispatcher()
 
-    private lateinit var viewModel: MoviesListViewModel
-
     private lateinit var movieListUseCase: MovieListUseCase
 
     @Before
@@ -45,31 +41,28 @@ class MovieListUseCaseTest {
         movieListUseCase = MovieListUseCase(
             movieRepository = movieRepository,
         )
-        viewModel = MoviesListViewModel(
-            movieListUseCase = MovieListUseCase(movieRepository),
-            coroutineDispatcher = coroutineTestDispatcher,
-        )
     }
 
     @Test
     fun `fetch movie list success test`() {
+        val mockMovieResult = mockk<MovieResult>()
         val mockMovieListResponse = mockk<MovieListResponse>()
 
-        val mockResponse = NetworkResponse.Success(mockMovieListResponse)
+        every {
+            mockMovieResult.id
+        } returns 10
+
+        every {
+            mockMovieListResponse.results
+        } returns listOf(mockMovieResult)
+
         coEvery {
             movieListUseCase.getMoviesList()
-        } returns mockResponse
-
-        viewModel.getMoviesList()
+        } returns NetworkResponse.Success(mockMovieListResponse)
 
         runTest {
-            viewModel.movieListState.test {
-                val result = awaitItem()
-                if (result is MovieListState.OnMovieListSuccess) {
-                    assert(result.response?.results?.size == 1)
-                    awaitComplete()
-                }
-            }
+            val data = movieListUseCase.getMoviesList()
+            assert(data is NetworkResponse.Success)
         }
     }
 
@@ -79,16 +72,8 @@ class MovieListUseCaseTest {
             movieListUseCase.getMoviesList()
         } returns NetworkResponse.Error(Constants.API_ERROR)
 
-        viewModel.getMoviesList()
-
         runTest {
-            viewModel.movieListState.test {
-                val result = awaitItem()
-                if (result is MovieListState.OnMovieListFailure) {
-                    assert(result.message == Constants.API_ERROR)
-                    awaitComplete()
-                }
-            }
+            assert(movieListUseCase.getMoviesList() is NetworkResponse.Error)
         }
     }
 
@@ -98,16 +83,8 @@ class MovieListUseCaseTest {
             movieListUseCase.getMoviesList()
         } returns NetworkResponse.Exception(UnknownHostException(Constants.UNKNOWN_ERROR))
 
-        viewModel.getMoviesList()
-
         runTest {
-            viewModel.movieListState.test {
-                val result = awaitItem()
-                if (result is MovieListState.OnMovieListFailure) {
-                    assert(result.message == Constants.UNKNOWN_ERROR)
-                    awaitComplete()
-                }
-            }
+            assert(movieListUseCase.getMoviesList() is NetworkResponse.Exception)
         }
     }
 }

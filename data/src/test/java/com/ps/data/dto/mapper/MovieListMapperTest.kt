@@ -1,5 +1,7 @@
-package com.ps.data.dto
+package com.ps.data.dto.mapper
 
+import com.ps.data.dto.MovieListResponseDto
+import com.ps.data.dto.MovieResultDto
 import com.ps.domain.modal.MovieListResponse
 import com.ps.domain.modal.MovieResult
 import junit.framework.TestCase.assertFalse

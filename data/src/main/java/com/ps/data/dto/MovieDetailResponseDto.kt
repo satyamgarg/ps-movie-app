@@ -1,8 +1,8 @@
 package com.ps.data.dto
 
 import androidx.annotation.Keep
+import com.ps.domain.mapper.Mapper
 import com.ps.domain.modal.MovieDetailResponse
-import com.ps.domain.utils.Mapper
 import com.squareup.moshi.Json
 
 @Keep

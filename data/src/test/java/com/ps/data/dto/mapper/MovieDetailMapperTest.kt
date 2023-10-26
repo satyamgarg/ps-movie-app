@@ -1,5 +1,8 @@
-package com.ps.data.dto
+package com.ps.data.dto.mapper
 
+import com.ps.data.dto.GenreDto
+import com.ps.data.dto.MovieDetailResponseDto
+import com.ps.data.dto.ProductionCompanyDto
 import com.ps.domain.modal.Genre
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.domain.modal.ProductionCompany

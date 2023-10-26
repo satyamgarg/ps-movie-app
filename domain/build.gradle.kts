@@ -1,17 +1,46 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("java-library")
-    id("org.jetbrains.kotlin.jvm")
-    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_18
-    targetCompatibility = JavaVersion.VERSION_18
+android {
+    namespace = "com.ps.domain"
+    compileSdk = 33
+
+    defaultConfig {
+        minSdk = 26
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
-    implementation(libs.javax.inject)
-    implementation("com.google.dagger:hilt-core:2.48.1")
-    ksp(libs.hilt.compiler)
+    api(libs.core.ktx)
+    api(libs.hilt.android)
+    api(libs.hilt.navigation)
+
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.junit)
+    testImplementation(libs.test.mock)
+    testImplementation(libs.test.coroutines)
+    testImplementation(libs.test.core)
 }

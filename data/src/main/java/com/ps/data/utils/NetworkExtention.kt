@@ -1,6 +1,6 @@
 package com.ps.data.utils
 
-import com.ps.domain.utils.Mapper
+import com.ps.domain.mapper.Mapper
 import com.ps.domain.utils.NetworkResponse
 import retrofit2.HttpException
 import retrofit2.Response

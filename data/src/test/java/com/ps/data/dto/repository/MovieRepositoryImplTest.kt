@@ -1,4 +1,4 @@
-package com.ps.movie.repository
+package com.ps.data.dto.repository
 
 import com.ps.data.dto.MovieDetailResponseDto
 import com.ps.data.dto.MovieListResponseDto

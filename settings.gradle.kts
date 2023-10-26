@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "PSMovieApp"
-include(":app", ":domain", ":data")
+include(":app", ":data", ":domain")
