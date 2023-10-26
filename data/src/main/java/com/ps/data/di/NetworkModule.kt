@@ -41,7 +41,7 @@ object NetworkModule {
             val response = chain.proceed(chain.request())
             val cacheControl = CacheControl.Builder().maxAge(1, TimeUnit.DAYS).build()
             return@Interceptor response.newBuilder()
-                .header("Cache-Control", cacheControl.toString())
+                .header(Constants.CACHE_CONTROL, cacheControl.toString())
                 .build()
         }
     }
