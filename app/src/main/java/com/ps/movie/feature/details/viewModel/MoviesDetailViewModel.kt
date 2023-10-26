@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.domain.usecase.MovieDetailsUseCase
 import com.ps.domain.utils.NetworkResponse
+import com.ps.movie.feature.MovieAction
 import com.ps.movie.feature.MovieIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,43 +23,60 @@ class MoviesDetailViewModel @Inject constructor(
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
-    private val _movieDetailsEvent = MutableStateFlow<MovieDetailEvent>(MovieDetailEvent.Void)
-    val movieDetailsEvent: StateFlow<MovieDetailEvent> = _movieDetailsEvent
-
     val channel = Channel<MovieIntent>()
 
-    init {
-        handleChannelEvent()
-    }
+    private val _movieDetailsState = MutableStateFlow<MovieDetailState>(MovieDetailState.Void)
+    val movieDetailsState: StateFlow<MovieDetailState> = _movieDetailsState
 
-    private fun handleChannelEvent() {
-        viewModelScope.launch {
-            channel.consumeAsFlow().collect { movieIntent ->
-                when (movieIntent) {
-                    is MovieIntent.GetMovieDetails -> {
-                        getMovieDetails(movieId = movieIntent.movieId)
-                    }
-
-                    else -> Unit
-                }
+    fun initializeIntentHandler() {
+        launchOnUI {
+            channel.consumeAsFlow().collect { intent ->
+                handleUIAction(intentToAction(intent))
             }
         }
     }
 
+    private fun handleUIAction(intentToAction: MovieAction) {
+        when (intentToAction) {
+            is MovieAction.GetMovieDetails -> {
+                getMovieDetails(movieId = intentToAction.movieId)
+            }
+
+            is MovieAction.DisplayAvailableDetails -> {
+                launchOnUI {
+                    _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(response = intentToAction.movieDetailResponse))
+                }
+            }
+
+            else -> Unit
+        }
+    }
+
+    private fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
+        viewModelScope.launch { block() }
+    }
+
+    private fun intentToAction(intent: MovieIntent): MovieAction {
+        return when (intent) {
+            is MovieIntent.GetMovieDetails -> MovieAction.GetMovieDetails(intent.movieId)
+            is MovieIntent.DisplayAvailableDetails -> MovieAction.DisplayAvailableDetails(intent.movieDetailResponse)
+            else -> MovieAction.None
+        }
+    }
+
     fun getMovieDetails(movieId: Int) {
-        _movieDetailsEvent.value = MovieDetailEvent.Loading
         viewModelScope.launch(coroutineDispatcher) {
             when (val response = movieDetailsUseCase.getMovieDetails(movieId)) {
                 is NetworkResponse.Success -> {
-                    _movieDetailsEvent.emit(MovieDetailEvent.OnMovieDetailSuccess(response.data))
+                    _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(response.data))
                 }
 
                 is NetworkResponse.Error -> {
-                    _movieDetailsEvent.emit(MovieDetailEvent.OnMovieDetailFailure(response.errorMessage))
+                    _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(response.errorMessage))
                 }
 
                 is NetworkResponse.Exception -> {
-                    _movieDetailsEvent.emit(MovieDetailEvent.OnMovieDetailFailure(response.errorMessage))
+                    _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(response.errorMessage))
                 }
 
                 else -> {}

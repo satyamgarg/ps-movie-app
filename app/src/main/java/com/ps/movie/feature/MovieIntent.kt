@@ -1,6 +1,9 @@
 package com.ps.movie.feature
 
-sealed class MovieIntent {
-    data object GetMovies : MovieIntent()
-    data class GetMovieDetails(val movieId: Int) : MovieIntent()
+import com.ps.domain.modal.MovieDetailResponse
+
+sealed interface MovieIntent {
+    data object GetMovies : MovieIntent
+    data class GetMovieDetails(val movieId: Int) : MovieIntent
+    data class DisplayAvailableDetails(val movieDetailResponse: MovieDetailResponse) : MovieIntent
 }

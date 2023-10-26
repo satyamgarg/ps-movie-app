@@ -6,7 +6,7 @@ import com.ps.domain.repository.MovieRepository
 import com.ps.domain.usecase.MovieListUseCase
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
-import com.ps.movie.feature.list.viewModel.MovieListEvents
+import com.ps.movie.feature.list.viewModel.MovieListState
 import com.ps.movie.feature.list.viewModel.MoviesListViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -63,9 +63,9 @@ class MovieListUseCaseTest {
         viewModel.getMoviesList()
 
         runTest {
-            viewModel.movieListEvent.test {
+            viewModel.movieListState.test {
                 val result = awaitItem()
-                if (result is MovieListEvents.OnMovieListSuccess) {
+                if (result is MovieListState.OnMovieListSuccess) {
                     assert(result.response?.results?.size == 1)
                     awaitComplete()
                 }
@@ -82,9 +82,9 @@ class MovieListUseCaseTest {
         viewModel.getMoviesList()
 
         runTest {
-            viewModel.movieListEvent.test {
+            viewModel.movieListState.test {
                 val result = awaitItem()
-                if (result is MovieListEvents.OnMovieListFailure) {
+                if (result is MovieListState.OnMovieListFailure) {
                     assert(result.message == Constants.API_ERROR)
                     awaitComplete()
                 }
@@ -101,9 +101,9 @@ class MovieListUseCaseTest {
         viewModel.getMoviesList()
 
         runTest {
-            viewModel.movieListEvent.test {
+            viewModel.movieListState.test {
                 val result = awaitItem()
-                if (result is MovieListEvents.OnMovieListFailure) {
+                if (result is MovieListState.OnMovieListFailure) {
                     assert(result.message == Constants.UNKNOWN_ERROR)
                     awaitComplete()
                 }

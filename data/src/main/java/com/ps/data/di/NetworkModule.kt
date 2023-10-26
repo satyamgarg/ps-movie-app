@@ -1,8 +1,8 @@
-package com.ps.movie.di
+package com.ps.data.di
 
+import com.ps.data.BuildConfig
 import com.ps.data.remote.MovieService
-import com.ps.movie.BuildConfig
-import com.ps.movie.util.Constants
+import com.ps.data.utils.Constants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

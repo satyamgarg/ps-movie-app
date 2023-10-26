@@ -1,6 +1,8 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
+    alias(libs.plugins.kotlin.ksp)
 }
 
 java {
@@ -10,4 +12,6 @@ java {
 
 dependencies {
     implementation(libs.javax.inject)
+    implementation("com.google.dagger:hilt-core:2.48.1")
+    ksp(libs.hilt.compiler)
 }

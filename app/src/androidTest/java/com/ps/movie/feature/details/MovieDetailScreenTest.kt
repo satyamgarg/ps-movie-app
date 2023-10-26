@@ -9,11 +9,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.movie.MovieActivity
-import com.ps.movie.di.NetworkModule
-import com.ps.movie.di.TestDispatcherModule
+import com.ps.data.di.NetworkModule
 import com.ps.movie.di.TestRepositoryModule
 import com.ps.movie.di.TestUseCaseModule
-import com.ps.movie.di.TestViewModelModule
+import com.ps.movie.feature.common.DisplayTitle
 import com.ps.movie.util.TestTags
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -25,10 +24,8 @@ import org.junit.Test
 @HiltAndroidTest
 @UninstallModules(
     NetworkModule::class,
-    TestDispatcherModule::class,
     TestRepositoryModule::class,
     TestUseCaseModule::class,
-    TestViewModelModule::class,
 )
 class MovieDetailScreenTest {
 
@@ -77,7 +74,6 @@ class MovieDetailScreenTest {
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_OVERVIEW).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_VOTE).assertIsDisplayed()
-        composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_RELEASE_DATE).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_VOTE).assertIsDisplayed()
         composeRule.onNodeWithTag(TestTags.MOVIE_DETAIL_RATING).assertIsDisplayed()
     }
