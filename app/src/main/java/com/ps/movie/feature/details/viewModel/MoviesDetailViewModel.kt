@@ -66,7 +66,7 @@ class MoviesDetailViewModel @Inject constructor(
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch(coroutineDispatcher) {
-            when (val response = movieDetailsUseCase.getMovieDetails(movieId)) {
+            when (val response = movieDetailsUseCase.invoke(movieId = movieId)) {
                 is NetworkResponse.Success -> {
                     _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(response.data))
                 }

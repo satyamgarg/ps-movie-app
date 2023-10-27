@@ -57,6 +57,10 @@ fun MovieListScreen(
                 .padding(paddingValues),
         ) {
             when (val state = viewModel.movieListState.collectAsStateWithLifecycle().value) {
+                is MovieListState.Loading -> {
+                    Text(modifier = Modifier.padding(10.dp), text = Constants.MESSAGE_LOADING)
+                }
+
                 is MovieListState.OnMovieListSuccess -> {
                     val movieList = state.response?.results ?: emptyList()
                     mutableMovieList.value = movieList
@@ -66,7 +70,6 @@ fun MovieListScreen(
                 is MovieListState.OnMovieListFailure -> {
                     Text(modifier = Modifier.padding(10.dp), text = state.message)
                 }
-
                 else -> Unit
             }
         }

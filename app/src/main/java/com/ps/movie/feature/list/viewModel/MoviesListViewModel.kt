@@ -42,6 +42,7 @@ class MoviesListViewModel @Inject constructor(
             is MovieAction.GetMovieList -> {
                 getMoviesList()
             }
+
             else -> Unit
         }
     }
@@ -56,10 +57,11 @@ class MoviesListViewModel @Inject constructor(
             else -> MovieAction.None
         }
     }
+
     fun getMoviesList() {
         _moviesListState.value = MovieListState.Loading
         viewModelScope.launch(coroutineDispatcher) {
-            when (val response = movieListUseCase.getMoviesList()) {
+            when (val response = movieListUseCase.invoke()) {
                 is NetworkResponse.Success -> {
                     _moviesListState.emit(MovieListState.OnMovieListSuccess(response.data))
                 }

@@ -6,7 +6,5 @@ import com.ps.domain.utils.NetworkResponse
 import javax.inject.Inject
 
 open class MovieDetailsUseCase @Inject constructor(private val movieRepository: MovieRepository) {
-    suspend fun getMovieDetails(movieId: Int): NetworkResponse<MovieDetailResponse> {
-        return movieRepository.getMovieDetails(movieId = movieId)
-    }
+    suspend operator fun invoke(movieId: Int): NetworkResponse<MovieDetailResponse> = movieRepository.getMovieDetails(movieId = movieId)
 }

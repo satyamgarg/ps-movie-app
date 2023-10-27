@@ -57,11 +57,11 @@ class MovieListUseCaseTest {
         } returns listOf(mockMovieResult)
 
         coEvery {
-            movieListUseCase.getMoviesList()
+            movieListUseCase.invoke()
         } returns NetworkResponse.Success(mockMovieListResponse)
 
         runTest {
-            val data = movieListUseCase.getMoviesList()
+            val data = movieListUseCase.invoke()
             assert(data is NetworkResponse.Success)
         }
     }
@@ -69,22 +69,22 @@ class MovieListUseCaseTest {
     @Test
     fun `fetch movie list failure test`() {
         coEvery {
-            movieListUseCase.getMoviesList()
+            movieListUseCase.invoke()
         } returns NetworkResponse.Error(Constants.API_ERROR)
 
         runTest {
-            assert(movieListUseCase.getMoviesList() is NetworkResponse.Error)
+            assert(movieListUseCase.invoke() is NetworkResponse.Error)
         }
     }
 
     @Test
     fun `fetch movie list exception test`() {
         coEvery {
-            movieListUseCase.getMoviesList()
+            movieListUseCase.invoke()
         } returns NetworkResponse.Exception(UnknownHostException(Constants.UNKNOWN_ERROR))
 
         runTest {
-            assert(movieListUseCase.getMoviesList() is NetworkResponse.Exception)
+            assert(movieListUseCase.invoke() is NetworkResponse.Exception)
         }
     }
 }

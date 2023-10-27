@@ -7,4 +7,5 @@ object Constants {
     const val OPR_QUESTION = "?"
     const val OPR_AND = "&"
     const val SERVER_ERROR = "Something went wrong. Please try again later."
+    const val MESSAGE_LOADING = "Loading details. Please wait..."
 }
