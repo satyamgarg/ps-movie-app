@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,14 +63,20 @@ fun MovieListScreen(
                 }
 
                 is MovieListState.OnMovieListSuccess -> {
-                    val movieList = state.response?.results ?: emptyList()
-                    mutableMovieList.value = movieList
-                    DisplayMovieList(results = mutableMovieList.value, onMovieClick = onMovieClick)
+                    val movieList = state.response?.results
+                    movieList?.let {
+                        mutableMovieList.value = it
+                        DisplayMovieList(
+                            results = it,
+                            onMovieClick = onMovieClick,
+                        )
+                    }
                 }
 
                 is MovieListState.OnMovieListFailure -> {
                     Text(modifier = Modifier.padding(10.dp), text = state.message)
                 }
+
                 else -> Unit
             }
         }
@@ -77,7 +84,7 @@ fun MovieListScreen(
 }
 
 @Composable
-fun DisplayMovieList(results: List<MovieResult>?, onMovieClick: (MovieResult) -> Unit) {
+fun DisplayMovieList(results: List<MovieResult>, onMovieClick: (MovieResult) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,17 +92,15 @@ fun DisplayMovieList(results: List<MovieResult>?, onMovieClick: (MovieResult) ->
             .padding(horizontal = 10.dp)
             .testTag(TestTags.MOVIE_LIST),
     ) {
-        items(results?.size ?: 0) { index ->
-            results?.get(index)?.let { movie ->
-                MovieBanner(
-                    modifier = Modifier
-                        .height(400.dp)
-                        .padding(5.dp),
-                    testTag = TestTags.MOVIE_LIST_ITEM_IMAGE + index,
-                    imagePath = "${Constants.IMAGE_URL}${movie.posterPath}",
-                ) {
-                    onMovieClick(movie)
-                }
+        itemsIndexed(results) { index, movie ->
+            MovieBanner(
+                modifier = Modifier
+                    .height(400.dp)
+                    .padding(5.dp),
+                testTag = TestTags.MOVIE_LIST_ITEM_IMAGE + index,
+                imagePath = "${Constants.IMAGE_URL}${movie.posterPath}",
+            ) {
+                onMovieClick(movie)
             }
         }
     }

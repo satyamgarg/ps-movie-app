@@ -1,106 +1,73 @@
 package com.ps.movie.viewmodel
 
-import app.cash.turbine.test
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.ps.domain.modal.MovieListResponse
-import com.ps.domain.repository.MovieRepository
 import com.ps.domain.usecase.MovieListUseCase
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
+import com.ps.movie.core.CoroutineRule
 import com.ps.movie.feature.list.viewModel.MovieListState
 import com.ps.movie.feature.list.viewModel.MoviesListViewModel
-import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MovieListViewModelTest {
 
     @get:Rule
+    val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val coroutineRule = CoroutineRule()
+
+    @get:Rule
     val mockkRule = MockKRule(this)
 
-    private val coroutineTestDispatcher = StandardTestDispatcher()
+    private val movieListUseCase: MovieListUseCase = mockk()
 
-    @MockK
-    private lateinit var movieRepository: MovieRepository
-
-    private lateinit var viewModel: MoviesListViewModel
-
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(coroutineTestDispatcher)
-        MockKAnnotations.init(this)
-        viewModel = MoviesListViewModel(
-            movieListUseCase = MovieListUseCase(movieRepository),
-            coroutineDispatcher = coroutineTestDispatcher,
-        )
-    }
+    private val viewModel = MoviesListViewModel(
+        movieListUseCase = movieListUseCase,
+    )
 
     @Test
-    fun `fetch movie list success test`() {
-        val mockMovieListResponse = mockk<MovieListResponse>()
-
+    fun `fetch movie detail loading success test`() {
         coEvery {
-            movieRepository.getMoviesList()
-        } returns NetworkResponse.Success(mockMovieListResponse)
-
-        viewModel.getMoviesList()
+            movieListUseCase()
+        } returns NetworkResponse.Success(MovieListResponse(results = emptyList()))
 
         runTest {
-            viewModel.movieListState.test {
-                val result = awaitItem()
-                if (result is MovieListState.OnMovieListSuccess) {
-                    assert(result.response?.results?.size == 1)
-                    awaitComplete()
-                }
-            }
+            viewModel.getMoviesList()
+            assert(viewModel.movieListState.value is MovieListState.OnMovieListSuccess)
         }
     }
 
     @Test
-    fun `fetch movie detail empty list failure test`() {
+    fun `fetch movie detail error failure test`() {
         coEvery {
-            movieRepository.getMoviesList()
+            movieListUseCase()
         } returns NetworkResponse.Error(errorMessage = Constants.EMPTY_LIST)
 
-        viewModel.getMoviesList()
-
         runTest {
-            viewModel.movieListState.test {
-                val result = awaitItem()
-                if (result is MovieListState.OnMovieListFailure) {
-                    assert(result.message == Constants.EMPTY_LIST)
-                    awaitComplete()
-                }
-            }
+            viewModel.getMoviesList()
+            assert(viewModel.movieListState.value is MovieListState.OnMovieListFailure)
         }
     }
 
     @Test
-    fun `fetch movie list empty exception failure test`() {
+    fun `fetch movie detail exception failure test`() {
         coEvery {
-            movieRepository.getMoviesList()
-        } returns NetworkResponse.Exception(Exception(Constants.UNKNOWN_ERROR))
-
-        viewModel.getMoviesList()
+            movieListUseCase()
+        } returns NetworkResponse.Exception(Exception(Constants.EMPTY_LIST))
 
         runTest {
-            viewModel.movieListState.test {
-                val result = awaitItem()
-                if (result is MovieListState.OnMovieListFailure) {
-                    assert(result.message == Constants.UNKNOWN_ERROR)
-                    awaitComplete()
-                }
-            }
+            viewModel.getMoviesList()
+            assert(viewModel.movieListState.value is MovieListState.OnMovieListFailure)
         }
     }
 }

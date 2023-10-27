@@ -7,9 +7,7 @@ import com.ps.domain.utils.NetworkResponse
 import com.ps.movie.feature.MovieAction
 import com.ps.movie.feature.MovieIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MoviesDetailViewModel @Inject constructor(
     private val movieDetailsUseCase: MovieDetailsUseCase,
-    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
     val channel = Channel<MovieIntent>()
@@ -65,7 +62,7 @@ class MoviesDetailViewModel @Inject constructor(
     }
 
     fun getMovieDetails(movieId: Int) {
-        viewModelScope.launch(coroutineDispatcher) {
+        viewModelScope.launch {
             when (val response = movieDetailsUseCase.invoke(movieId = movieId)) {
                 is NetworkResponse.Success -> {
                     _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(response.data))
