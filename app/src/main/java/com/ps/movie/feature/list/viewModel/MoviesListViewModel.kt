@@ -20,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesListViewModel @Inject constructor(
-    private val movieListUseCase: MovieListUseCase,
-    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    val movieListUseCase: MovieListUseCase,
 ) : ViewModel() {
 
     val channel = Channel<MovieIntent>()
@@ -42,7 +41,6 @@ class MoviesListViewModel @Inject constructor(
             is MovieAction.GetMovieList -> {
                 getMoviesList()
             }
-
             else -> Unit
         }
     }
@@ -57,11 +55,10 @@ class MoviesListViewModel @Inject constructor(
             else -> MovieAction.None
         }
     }
-
     fun getMoviesList() {
         _moviesListState.value = MovieListState.Loading
-        viewModelScope.launch(coroutineDispatcher) {
-            when (val response = movieListUseCase.invoke()) {
+        viewModelScope.launch {
+            when (val response = movieListUseCase()) {
                 is NetworkResponse.Success -> {
                     _moviesListState.emit(MovieListState.OnMovieListSuccess(response.data))
                 }

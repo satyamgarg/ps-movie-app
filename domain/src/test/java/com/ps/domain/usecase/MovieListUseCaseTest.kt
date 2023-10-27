@@ -5,17 +5,12 @@ import com.ps.domain.modal.MovieResult
 import com.ps.domain.repository.MovieRepository
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
-import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,17 +22,12 @@ class MovieListUseCaseTest {
     @get:Rule
     val mockkRule = MockKRule(this)
 
-    @MockK
-    private lateinit var movieRepository: MovieRepository
-
-    private val coroutineTestDispatcher = StandardTestDispatcher()
+    private val movieRepository: MovieRepository = mockk()
 
     private lateinit var movieListUseCase: MovieListUseCase
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(coroutineTestDispatcher)
-        MockKAnnotations.init(this)
         movieListUseCase = MovieListUseCase(
             movieRepository = movieRepository,
         )
@@ -49,19 +39,15 @@ class MovieListUseCaseTest {
         val mockMovieListResponse = mockk<MovieListResponse>()
 
         every {
-            mockMovieResult.id
-        } returns 10
-
-        every {
             mockMovieListResponse.results
         } returns listOf(mockMovieResult)
 
         coEvery {
-            movieListUseCase.invoke()
+            movieRepository.getMoviesList()
         } returns NetworkResponse.Success(mockMovieListResponse)
 
         runTest {
-            val data = movieListUseCase.invoke()
+            val data = movieListUseCase()
             assert(data is NetworkResponse.Success)
         }
     }
@@ -69,22 +55,22 @@ class MovieListUseCaseTest {
     @Test
     fun `fetch movie list failure test`() {
         coEvery {
-            movieListUseCase.invoke()
+            movieRepository.getMoviesList()
         } returns NetworkResponse.Error(Constants.API_ERROR)
 
         runTest {
-            assert(movieListUseCase.invoke() is NetworkResponse.Error)
+            assert(movieListUseCase() is NetworkResponse.Error)
         }
     }
 
     @Test
     fun `fetch movie list exception test`() {
         coEvery {
-            movieListUseCase.invoke()
+            movieRepository.getMoviesList()
         } returns NetworkResponse.Exception(UnknownHostException(Constants.UNKNOWN_ERROR))
 
         runTest {
-            assert(movieListUseCase.invoke() is NetworkResponse.Exception)
+            assert(movieListUseCase() is NetworkResponse.Exception)
         }
     }
 }
