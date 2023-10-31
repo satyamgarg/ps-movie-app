@@ -19,7 +19,7 @@ interface MovieService {
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
-        @Path("movie_id") movieId: Int,
+        @Path("movie_id") movieId: String,
         @Query("api_key") apiKey: String = BuildConfig.APIKEY,
         @Query("language") language: String = Constants.LANGUAGE,
     ): Response<MovieDetailResponseDto>

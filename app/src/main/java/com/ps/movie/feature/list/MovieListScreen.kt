@@ -32,7 +32,7 @@ import com.ps.movie.util.TestTags
 @Composable
 fun MovieListScreen(
     viewModel: MoviesListViewModel = hiltViewModel(),
-    onMovieClick: (MovieResult) -> Unit,
+    onMovieClick: (Int) -> Unit,
 ) {
     val mutableMovieList = remember { mutableStateOf<List<MovieResult>>(emptyList()) }
 
@@ -84,7 +84,7 @@ fun MovieListScreen(
 }
 
 @Composable
-fun DisplayMovieList(results: List<MovieResult>, onMovieClick: (MovieResult) -> Unit) {
+fun DisplayMovieList(results: List<MovieResult>, onMovieClick: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +100,7 @@ fun DisplayMovieList(results: List<MovieResult>, onMovieClick: (MovieResult) -> 
                 testTag = TestTags.MOVIE_LIST_ITEM_IMAGE + index,
                 imagePath = "${Constants.IMAGE_URL}${movie.posterPath}",
             ) {
-                onMovieClick(movie)
+                movie.id?.let(onMovieClick)
             }
         }
     }

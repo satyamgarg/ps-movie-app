@@ -6,5 +6,5 @@ import com.ps.domain.utils.NetworkResponse
 
 interface MovieRepository {
     suspend fun getMoviesList(): NetworkResponse<MovieListResponse>
-    suspend fun getMovieDetails(movieId: Int): NetworkResponse<MovieDetailResponse>
+    suspend fun getMovieDetails(movieId: String): NetworkResponse<MovieDetailResponse>
 }

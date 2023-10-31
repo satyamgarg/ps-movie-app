@@ -20,7 +20,7 @@ class MovieRepositoryImpl @Inject constructor(private val movieService: MovieSer
             },
         )
 
-    override suspend fun getMovieDetails(movieId: Int): NetworkResponse<MovieDetailResponse> =
+    override suspend fun getMovieDetails(movieId: String): NetworkResponse<MovieDetailResponse> =
         safeApiCall(
             apiCall = {
                 movieService.getMovieDetails(movieId)

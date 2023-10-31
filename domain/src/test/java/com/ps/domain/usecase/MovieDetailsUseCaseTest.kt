@@ -35,33 +35,33 @@ class MovieDetailsUseCaseTest {
 
         val mockResponse = NetworkResponse.Success(mockMovieDetailResponse)
         coEvery {
-            movieDetailRepository.getMovieDetails(movieId = 1)
+            movieDetailRepository.getMovieDetails(movieId = "1")
         } returns mockResponse
 
         runTest {
-            assert(movieDetailsUseCase.invoke(movieId = 1) is NetworkResponse.Success)
+            assert(movieDetailsUseCase.invoke(movieId = "1") is NetworkResponse.Success)
         }
     }
 
     @Test
     fun `fetch movie details error test`() {
         coEvery {
-            movieDetailRepository.getMovieDetails(movieId = 1)
+            movieDetailRepository.getMovieDetails(movieId = "1")
         } returns NetworkResponse.Error(Constants.EMPTY_LIST)
 
         runTest {
-            assert(movieDetailsUseCase.invoke(1) is NetworkResponse.Error)
+            assert(movieDetailsUseCase.invoke("1") is NetworkResponse.Error)
         }
     }
 
     @Test
     fun `fetch movie details exception test`() {
         coEvery {
-            movieDetailRepository.getMovieDetails(movieId = 1)
+            movieDetailRepository.getMovieDetails(movieId = "1")
         } returns NetworkResponse.Exception(UnknownHostException(Constants.UNKNOWN_ERROR))
 
         runTest {
-            assert(movieDetailsUseCase.invoke(1) is NetworkResponse.Exception)
+            assert(movieDetailsUseCase.invoke("1") is NetworkResponse.Exception)
         }
     }
 }

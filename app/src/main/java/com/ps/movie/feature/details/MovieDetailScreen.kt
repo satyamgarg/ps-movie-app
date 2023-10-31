@@ -11,11 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,43 +23,26 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieDetailResponse
-import com.ps.domain.modal.MovieResult
 import com.ps.movie.R
-import com.ps.movie.feature.MovieIntent
 import com.ps.movie.feature.common.MovieAppBar
 import com.ps.movie.feature.common.MovieBanner
 import com.ps.movie.feature.details.viewModel.MovieDetailState
 import com.ps.movie.feature.details.viewModel.MoviesDetailViewModel
 import com.ps.movie.util.Constants
-import com.ps.movie.util.MoshiParser
 import com.ps.movie.util.TestTags
 import com.ps.movie.util.safeDouble
 import com.ps.movie.util.safeLong
 
 @Composable
-fun MovieDetailScreen(movieObj: String, onBackPressed: () -> Unit) {
+fun MovieDetailScreen(onBackPressed: () -> Unit) {
     val moviesDetailViewModel: MoviesDetailViewModel = hiltViewModel()
-    val movie = MoshiParser().fromJson<MovieResult>(movieObj, MovieResult::class.java)
-    var movieDetails by remember { mutableStateOf(MovieDetailResponse()) }
 
-    LaunchedEffect(key1 = Unit, block = {
-        movie?.id?.let { movieId ->
-            moviesDetailViewModel.initializeIntentHandler()
-            val availableDetails = MovieDetailResponse(
-                id = movie.id,
-                posterPath = movie.posterPath,
-                overview = movie.overview,
-            )
-            movieDetails = availableDetails
-            moviesDetailViewModel.channel.send(MovieIntent.DisplayAvailableDetails(availableDetails))
-            moviesDetailViewModel.channel.send(MovieIntent.GetMovieDetails(movieId = movieId))
-        } ?: run { onBackPressed() }
-    })
+    val movieDetailsTitle = moviesDetailViewModel.movieDetailsTitleState.value
 
     Scaffold(
         topBar = {
             MovieAppBar(
-                title = movie?.title.orEmpty(),
+                title = movieDetailsTitle.toString(),
                 tagName = TestTags.MOVIE_DETAIL_BACK_BUTTON,
                 isBackEnabled = true,
                 onBackClick = { onBackPressed.invoke() },
@@ -78,7 +56,7 @@ fun MovieDetailScreen(movieObj: String, onBackPressed: () -> Unit) {
             ) {
                 is MovieDetailState.OnMovieDetailSuccess -> {
                     DisplayMovieDetails(
-                        movie = state.response ?: movieDetails,
+                        movie = state.response,
                     )
                 }
 

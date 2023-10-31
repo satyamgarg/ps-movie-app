@@ -13,6 +13,7 @@ import io.mockk.junit4.MockKRule
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -31,9 +32,12 @@ class MovieListViewModelTest {
 
     private val movieListUseCase: MovieListUseCase = mockk()
 
-    private val viewModel = MoviesListViewModel(
-        movieListUseCase = movieListUseCase,
-    )
+    private lateinit var viewModel: MoviesListViewModel
+
+    @Before
+    fun setUp() {
+        viewModel = MoviesListViewModel(movieListUseCase)
+    }
 
     @Test
     fun `fetch movie detail loading success test`() {

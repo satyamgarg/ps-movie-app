@@ -132,11 +132,11 @@ class MovieRepositoryImplTest {
         } returns mockMovieDetailResponse
 
         coEvery {
-            movieService.getMovieDetails(1)
+            movieService.getMovieDetails("1")
         } returns mockHttpMovieDetailResponseDto
 
         runTest {
-            val result = movieRepository.getMovieDetails(1)
+            val result = movieRepository.getMovieDetails("1")
             assert(result is NetworkResponse.Success)
         }
     }
@@ -153,11 +153,11 @@ class MovieRepositoryImplTest {
         } returns "Server not responding"
 
         coEvery {
-            movieService.getMovieDetails(1)
+            movieService.getMovieDetails("1")
         } returns mockHttpMovieDetailResponse
 
         runTest {
-            val result = movieRepository.getMovieDetails(1)
+            val result = movieRepository.getMovieDetails("1")
             assert(result is NetworkResponse.Error)
         }
     }
@@ -174,11 +174,11 @@ class MovieRepositoryImplTest {
         } returns null
 
         coEvery {
-            movieService.getMovieDetails(1)
+            movieService.getMovieDetails("1")
         } returns mockHttpMovieListResponse
 
         runTest {
-            val result = movieRepository.getMovieDetails(1)
+            val result = movieRepository.getMovieDetails("1")
             assert(result is NetworkResponse.Error)
         }
     }
@@ -186,7 +186,7 @@ class MovieRepositoryImplTest {
     @Test
     fun `fetch movie detail network failure`() {
         coEvery {
-            movieService.getMovieDetails(1)
+            movieService.getMovieDetails("1")
         } throws UnknownHostException()
 
         runTest {
