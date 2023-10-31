@@ -1,4 +1,4 @@
-package com.ps.movie.ui.theme
+package com.ps.movie.theme
 
 import android.app.Activity
 import android.os.Build

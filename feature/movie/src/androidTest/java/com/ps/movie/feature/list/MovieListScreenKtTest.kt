@@ -10,7 +10,6 @@ import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
 import com.ps.data.di.NetworkModule
 import com.ps.domain.modal.MovieResult
-import com.ps.movie.MovieActivity
 import com.ps.movie.di.TestRepositoryModule
 import com.ps.movie.di.TestUseCaseModule
 import com.ps.movie.util.TestTags
@@ -33,7 +32,7 @@ class MovieListScreenKtTest {
     val hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeRule = createAndroidComposeRule<MovieActivity>()
+    val composeRule = createAndroidComposeRule<com.ps.movie.MovieActivity>()
 
     @Before
     fun setUp() {

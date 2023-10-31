@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -110,7 +109,7 @@ fun DisplayMovieDetails(movie: MovieDetailResponse?) {
             Text(
                 modifier = Modifier.padding(start = 1.dp),
                 text = movie?.genres?.map { it?.name }.toString(),
-                color = colorResource(id = R.color.off_white),
+                color = Color.White,
                 fontSize = 12.sp,
             )
         }
@@ -132,7 +131,7 @@ fun DisplayMovieDetails(movie: MovieDetailResponse?) {
                     .padding(10.dp)
                     .testTag(TestTags.MOVIE_DETAIL_VOTE),
                 text = "${stringResource(id = R.string.vote)}\n$voteCount",
-                color = colorResource(id = R.color.off_white),
+                color = Color.White,
             )
         }
 
@@ -165,7 +164,7 @@ fun DisplayMovieDetails(movie: MovieDetailResponse?) {
                 .padding(start = 10.dp, bottom = 20.dp, end = 10.dp)
                 .testTag(TestTags.MOVIE_DETAIL_OVERVIEW),
             text = movie?.overview.orEmpty(),
-            color = colorResource(id = R.color.off_white),
+            color = Color.White,
         )
     }
 }

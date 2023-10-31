@@ -1,4 +1,4 @@
-package com.ps.movie.ui.theme
+package com.ps.movie.theme
 
 import androidx.compose.ui.graphics.Color
 

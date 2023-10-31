@@ -5,6 +5,7 @@ import com.ps.domain.repository.MovieRepository
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,6 +33,9 @@ class MovieDetailsUseCaseTest {
     @Test
     fun `fetch movie details success test`() {
         val mockMovieDetailResponse = mockk<MovieDetailResponse>()
+        every {
+            mockMovieDetailResponse.overview
+        } returns "overview"
 
         val mockResponse = NetworkResponse.Success(mockMovieDetailResponse)
         coEvery {
@@ -40,6 +44,17 @@ class MovieDetailsUseCaseTest {
 
         runTest {
             assert(movieDetailsUseCase(movieId = "1") is NetworkResponse.Success)
+        }
+    }
+
+    @Test
+    fun `fetch movie details overview not found failure test`() {
+        coEvery {
+            movieDetailRepository.getMovieDetails(movieId = "1")
+        } returns NetworkResponse.Error(Constants.API_ERROR)
+
+        runTest {
+            assert(movieDetailsUseCase(movieId = "1") is NetworkResponse.Error)
         }
     }
 

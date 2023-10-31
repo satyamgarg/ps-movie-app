@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ps.movie.ui.theme.MovieDemoAppTheme
+import com.ps.movie.theme.MovieDemoAppTheme
 
 abstract class BaseActivity : ComponentActivity() {
 
