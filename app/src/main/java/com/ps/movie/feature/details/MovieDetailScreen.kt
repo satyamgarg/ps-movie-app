@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.movie.R
+import com.ps.movie.feature.UiEvent
 import com.ps.movie.feature.common.MovieAppBar
 import com.ps.movie.feature.common.MovieBanner
 import com.ps.movie.feature.details.viewModel.MovieDetailState
@@ -36,8 +38,11 @@ import com.ps.movie.util.safeLong
 @Composable
 fun MovieDetailScreen(onBackPressed: () -> Unit) {
     val moviesDetailViewModel: MoviesDetailViewModel = hiltViewModel()
-
     val movieDetailsTitle = moviesDetailViewModel.movieDetailsTitleState.value
+
+    LaunchedEffect(key1 = Unit, block = {
+        moviesDetailViewModel.onEvent(UiEvent.InitState)
+    })
 
     Scaffold(
         topBar = {
@@ -54,6 +59,10 @@ fun MovieDetailScreen(onBackPressed: () -> Unit) {
                 val state =
                     moviesDetailViewModel.movieDetailsState.collectAsStateWithLifecycle().value
             ) {
+                is MovieDetailState.Loading -> {
+                    Text(modifier = Modifier.padding(10.dp), text = Constants.MESSAGE_LOADING)
+                }
+
                 is MovieDetailState.OnMovieDetailSuccess -> {
                     DisplayMovieDetails(
                         movie = state.response,
@@ -63,8 +72,6 @@ fun MovieDetailScreen(onBackPressed: () -> Unit) {
                 is MovieDetailState.OnMovieDetailFailure -> {
                     Text(modifier = Modifier.padding(10.dp), text = state.message.toString())
                 }
-
-                else -> Unit
             }
         }
     }

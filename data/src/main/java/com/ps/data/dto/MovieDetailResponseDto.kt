@@ -1,6 +1,7 @@
 package com.ps.data.dto
 
 import androidx.annotation.Keep
+import com.ps.data.utils.Constants
 import com.ps.domain.mapper.Mapper
 import com.ps.domain.modal.MovieDetailResponse
 import com.squareup.moshi.Json
@@ -87,10 +88,10 @@ data class MovieDetailResponseDto(
     override fun mapToDomain(): MovieDetailResponse {
         return MovieDetailResponse(
             id = id,
-            title = title,
+            title = title ?: Constants.EMPTY_STRING,
             backdropPath = backdropPath,
             genres = genres?.map { it?.mapToDomain() },
-            overview = overview,
+            overview = overview ?: Constants.EMPTY_STRING,
             posterPath = posterPath,
             productionCompanies = productionCompanies?.map { it?.mapToDomain() },
             voteAverage = voteAverage,

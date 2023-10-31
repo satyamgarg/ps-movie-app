@@ -39,7 +39,7 @@ class MovieDetailsUseCaseTest {
         } returns mockResponse
 
         runTest {
-            assert(movieDetailsUseCase.invoke(movieId = "1") is NetworkResponse.Success)
+            assert(movieDetailsUseCase(movieId = "1") is NetworkResponse.Success)
         }
     }
 
@@ -50,7 +50,7 @@ class MovieDetailsUseCaseTest {
         } returns NetworkResponse.Error(Constants.EMPTY_LIST)
 
         runTest {
-            assert(movieDetailsUseCase.invoke("1") is NetworkResponse.Error)
+            assert(movieDetailsUseCase("1") is NetworkResponse.Error)
         }
     }
 
@@ -61,7 +61,7 @@ class MovieDetailsUseCaseTest {
         } returns NetworkResponse.Exception(UnknownHostException(Constants.UNKNOWN_ERROR))
 
         runTest {
-            assert(movieDetailsUseCase.invoke("1") is NetworkResponse.Exception)
+            assert(movieDetailsUseCase("1") is NetworkResponse.Exception)
         }
     }
 }

@@ -22,10 +22,7 @@ data class MovieListResponseDto(
 ) : Mapper<MovieListResponse> {
     override fun mapToDomain(): MovieListResponse {
         return MovieListResponse(
-            page = page ?: 0,
             results = results?.map { it.mapToDomain() } ?: emptyList(),
-            totalPages = totalPages ?: 0,
-            totalResults = totalResults ?: 0,
         )
     }
 }

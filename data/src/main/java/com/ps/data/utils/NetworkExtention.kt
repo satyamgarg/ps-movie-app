@@ -14,7 +14,7 @@ suspend fun <R : Mapper<T>, T : Any> safeApiCall(
         return when {
             response.isSuccessful ->
                 response.body()?.let {
-                    NetworkResponse.Success(dataMapper(it))
+                    NetworkResponse.Success(data = dataMapper(it))
                 } ?: NetworkResponse.Error(errorMessage = Constants.EMPTY_BODY)
 
             else -> NetworkResponse.Error(errorMessage = response.message())

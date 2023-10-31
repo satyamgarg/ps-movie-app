@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -18,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieResult
 import com.ps.movie.R
+import com.ps.movie.feature.UiEvent
 import com.ps.movie.feature.common.MovieAppBar
 import com.ps.movie.feature.common.MovieBanner
 import com.ps.movie.feature.list.viewModel.MovieListState
@@ -30,6 +32,10 @@ fun MovieListScreen(
     viewModel: MoviesListViewModel = hiltViewModel(),
     onMovieClick: (Int) -> Unit,
 ) {
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel.onEvent(UiEvent.InitState)
+    })
+
     Scaffold(
         topBar = {
             MovieAppBar(
@@ -61,8 +67,6 @@ fun MovieListScreen(
                 is MovieListState.OnMovieListFailure -> {
                     Text(modifier = Modifier.padding(10.dp), text = state.message)
                 }
-
-                else -> Unit
             }
         }
     }
@@ -85,7 +89,7 @@ fun DisplayMovieList(results: List<MovieResult>, onMovieClick: (Int) -> Unit) {
                 testTag = TestTags.MOVIE_LIST_ITEM_IMAGE + index,
                 imagePath = "${Constants.IMAGE_URL}${movie.posterPath}",
             ) {
-                movie.id?.let(onMovieClick)
+                onMovieClick(movie.id)
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.domain.usecase.MovieDetailsUseCase
 import com.ps.domain.utils.NetworkResponse
+import com.ps.movie.feature.UiEvent
 import com.ps.movie.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,32 +18,32 @@ import javax.inject.Inject
 @HiltViewModel
 class MoviesDetailViewModel @Inject constructor(
     private val movieDetailsUseCase: MovieDetailsUseCase,
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _movieDetailsState = MutableStateFlow<MovieDetailState>(MovieDetailState.Void)
+    private val _movieDetailsState = MutableStateFlow<MovieDetailState>(MovieDetailState.Loading)
     val movieDetailsState: StateFlow<MovieDetailState> = _movieDetailsState
 
     private val _movieDetailsTitleState =
         mutableStateOf<String?>(null)
     val movieDetailsTitleState: State<String?> = _movieDetailsTitleState
 
-    init {
-        savedStateHandle.get<String>(Constants.MOVIE_ID)?.let {
-            getMovieDetails(it)
+    fun onEvent(uiEvent: UiEvent) {
+        when (uiEvent) {
+            is UiEvent.InitState -> {
+                savedStateHandle.get<String>(Constants.MOVIE_ID)?.let {
+                    getMovieDetails(it)
+                }
+            }
         }
     }
 
-    fun getMovieDetails(movieId: String) {
+    private fun getMovieDetails(movieId: String) {
         viewModelScope.launch {
             when (val response = movieDetailsUseCase(movieId = movieId)) {
                 is NetworkResponse.Success -> {
-                    response.data?.let {
-                        _movieDetailsTitleState.value = it.title
-                        _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(it))
-                    } ?: kotlin.run {
-                        _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(Constants.SERVER_ERROR))
-                    }
+                    _movieDetailsTitleState.value = response.data.title
+                    _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(response.data))
                 }
 
                 is NetworkResponse.Error -> {
@@ -52,8 +53,6 @@ class MoviesDetailViewModel @Inject constructor(
                 is NetworkResponse.Exception -> {
                     _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(Constants.SERVER_ERROR))
                 }
-
-                else -> {}
             }
         }
     }

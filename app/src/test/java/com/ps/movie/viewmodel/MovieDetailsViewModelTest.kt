@@ -7,6 +7,7 @@ import com.ps.domain.usecase.MovieDetailsUseCase
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
 import com.ps.movie.core.CoroutineRule
+import com.ps.movie.feature.UiEvent
 import com.ps.movie.feature.details.viewModel.MovieDetailState
 import com.ps.movie.feature.details.viewModel.MoviesDetailViewModel
 import io.mockk.coEvery
@@ -49,7 +50,7 @@ class MovieDetailsViewModelTest {
         } returns NetworkResponse.Success(MovieDetailResponse())
 
         runTest {
-            viewModel.getMovieDetails("1")
+            viewModel.onEvent(UiEvent.InitState)
             assert(viewModel.movieDetailsState.value is MovieDetailState.OnMovieDetailSuccess)
         }
     }
@@ -61,7 +62,7 @@ class MovieDetailsViewModelTest {
         } returns NetworkResponse.Error(errorMessage = Constants.EMPTY_LIST)
 
         runTest {
-            viewModel.getMovieDetails("1")
+            viewModel.onEvent(UiEvent.InitState)
             assert(viewModel.movieDetailsState.value is MovieDetailState.OnMovieDetailFailure)
         }
     }
@@ -73,7 +74,7 @@ class MovieDetailsViewModelTest {
         } returns NetworkResponse.Exception(Exception(Constants.EMPTY_LIST))
 
         runTest {
-            viewModel.getMovieDetails("1")
+            viewModel.onEvent(UiEvent.InitState)
             assert(viewModel.movieDetailsState.value is MovieDetailState.OnMovieDetailFailure)
         }
     }

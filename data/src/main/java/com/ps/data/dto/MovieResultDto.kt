@@ -1,5 +1,6 @@
 package com.ps.data.dto
 
+import com.ps.data.utils.Constants
 import com.ps.domain.mapper.Mapper
 import com.ps.domain.modal.MovieResult
 import com.squareup.moshi.Json
@@ -49,10 +50,8 @@ data class MovieResultDto(
 
 ) : Mapper<MovieResult> {
     override fun mapToDomain() = MovieResult(
-        id = id,
-        posterPath = posterPath,
-        overview = overview,
-        releaseDate = releaseDate,
-        title = title,
+        id = id ?: 0,
+        posterPath = posterPath ?: Constants.EMPTY_STRING,
+        title = title ?: Constants.EMPTY_STRING,
     )
 }

@@ -70,8 +70,8 @@ class MovieListScreenKtTest {
     @Test
     fun onAppLaunchIfMovieFirstListItemPresent() {
         val movieList = listOf(
-            MovieResult(title = "EXPANDABLE"),
-            MovieResult(title = "MISSION-IMPOSSIBLE"),
+            MovieResult(id = 10, title = "EXPANDABLE", posterPath = "/poster"),
+            MovieResult(id = 10, title = "MISSION-IMPOSSIBLE", posterPath = "/poster1"),
         )
         composeRule.activity.setContent {
             DisplayMovieList(results = movieList, onMovieClick = {})
