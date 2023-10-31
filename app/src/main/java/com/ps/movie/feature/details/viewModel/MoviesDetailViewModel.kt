@@ -40,6 +40,8 @@ class MoviesDetailViewModel @Inject constructor(
                     response.data?.let {
                         _movieDetailsTitleState.value = it.title
                         _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(it))
+                    } ?: kotlin.run {
+                        _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(Constants.SERVER_ERROR))
                     }
                 }
 
@@ -48,7 +50,7 @@ class MoviesDetailViewModel @Inject constructor(
                 }
 
                 is NetworkResponse.Exception -> {
-                    _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(response.errorMessage))
+                    _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(Constants.SERVER_ERROR))
                 }
 
                 else -> {}

@@ -10,9 +10,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -21,7 +18,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieResult
 import com.ps.movie.R
-import com.ps.movie.feature.MovieIntent
 import com.ps.movie.feature.common.MovieAppBar
 import com.ps.movie.feature.common.MovieBanner
 import com.ps.movie.feature.list.viewModel.MovieListState
@@ -34,15 +30,6 @@ fun MovieListScreen(
     viewModel: MoviesListViewModel = hiltViewModel(),
     onMovieClick: (Int) -> Unit,
 ) {
-    val mutableMovieList = remember { mutableStateOf<List<MovieResult>>(emptyList()) }
-
-    LaunchedEffect(key1 = Unit, block = {
-        if (mutableMovieList.value.isEmpty()) {
-            viewModel.initializeIntentHandler()
-            viewModel.channel.send(MovieIntent.GetMovies)
-        }
-    })
-
     Scaffold(
         topBar = {
             MovieAppBar(
@@ -63,9 +50,7 @@ fun MovieListScreen(
                 }
 
                 is MovieListState.OnMovieListSuccess -> {
-                    val movieList = state.response?.results
-                    movieList?.let {
-                        mutableMovieList.value = it
+                    state.response.results.let {
                         DisplayMovieList(
                             results = it,
                             onMovieClick = onMovieClick,
