@@ -37,6 +37,7 @@ daggerHilt = "2.48"
 testTurbine = "0.12.1"
 appcompat = "1.6.1"
 material = "1.10.0"
+constraintlayout = "2.1.4"
 
 [libraries]
 # Android Core
@@ -89,6 +90,7 @@ test-hilt-android-compiler = {module = "com.google.dagger:hilt-android-compiler"
 test-turbine = {module = " app.cash.turbine:turbine", version.ref = "testTurbine"}
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [bundles]
 androidx-compose-bom = ["compose-bom", "ui-tooling", "compose-ui", "compose-ui-graphics", "compose-tooling-preview", "androidx-material3"]

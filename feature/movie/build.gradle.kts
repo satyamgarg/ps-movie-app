@@ -7,19 +7,19 @@ plugins {
 }
 
 android {
-    namespace = "com.ps.movie"
+    namespace = "com.ps.movies"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 26
 
-        testInstrumentationRunner = "com.ps.movie.HiltTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -44,7 +44,6 @@ android {
 dependencies {
 
     implementation(projects.domain)
-    implementation(projects.data)
 
     implementation(libs.bundles.androidx.compose.bom)
     implementation(platform(libs.kotlin.bom))
@@ -57,6 +56,9 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
     ksp(libs.hilt.compiler)
 
     implementation(libs.image.glide)

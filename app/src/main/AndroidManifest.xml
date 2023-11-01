@@ -16,9 +16,8 @@
         android:theme="@style/Theme.MovieDemoApp"
         tools:targetApi="31">
         <activity
-            android:name="com.ps.movie.MovieActivity"
+            android:name="com.ps.movies.MovieActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.MovieDemoApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
