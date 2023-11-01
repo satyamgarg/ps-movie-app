@@ -37,10 +37,8 @@ class MovieListMapperTest {
             results = listOf(
                 MovieResult(
                     id = 10,
-                    overview = "overview",
                     title = "title",
                     posterPath = "/posterpath",
-                    releaseDate = "date",
                 ),
             ),
         )
@@ -75,17 +73,13 @@ class MovieListMapperTest {
             results = listOf(
                 MovieResult(
                     id = 10,
-                    overview = "overview detail",
                     title = "title name",
                     posterPath = "/poster path",
-                    releaseDate = "26/10/13",
                 ),
                 MovieResult(
                     id = 11,
-                    overview = "overview details",
                     title = "movie title name",
                     posterPath = "/poster_path_detail",
-                    releaseDate = "26/10/13",
                 ),
             ),
         )

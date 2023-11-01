@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.ps.movie.HiltTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -58,39 +58,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.domain)
-    implementation(projects.data)
-
-    implementation(libs.bundles.androidx.compose.bom)
-    implementation(platform(libs.kotlin.bom))
-
-    implementation(libs.core.ktx)
-    implementation(libs.activity.compose)
-    implementation(libs.compose.navigation)
-    implementation(libs.compose.lifecycle)
-    implementation(libs.androidx.lifecycle)
-
+    implementation(projects.feature.movie)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     ksp(libs.hilt.compiler)
-
-    implementation(libs.image.glide)
-    implementation(libs.bundles.retrofit)
-    implementation(libs.moshi.kotlin)
-    ksp(libs.moshi.codegen)
-
-    testImplementation(libs.test.junit)
-    androidTestImplementation(libs.test.junit)
-    testImplementation(libs.test.turbine)
-    androidTestImplementation(libs.test.espresso)
-    androidTestImplementation(libs.test.junitExtension)
-    androidTestImplementation(libs.test.compose.ui.test)
-    debugImplementation(libs.test.compose.ui.tooling)
-    debugImplementation(libs.test.compose.manifest)
-    androidTestImplementation(libs.test.hilt.android)
-    testImplementation(libs.test.mock)
-    testImplementation(libs.test.coroutines)
-    testImplementation(libs.test.core)
-    testImplementation(libs.test.hilt.android)
-    kspTest(libs.test.hilt.android.compiler)
 }
