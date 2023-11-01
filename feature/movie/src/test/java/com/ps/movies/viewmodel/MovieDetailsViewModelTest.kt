@@ -7,9 +7,9 @@ import com.ps.domain.usecase.MovieDetailsUseCase
 import com.ps.domain.utils.Constants
 import com.ps.domain.utils.NetworkResponse
 import com.ps.movies.core.CoroutineRule
-import com.ps.movies.feature.UiEvent
-import com.ps.movies.feature.details.viewModel.MovieDetailState
-import com.ps.movies.feature.details.viewModel.MoviesDetailViewModel
+import com.ps.movies.ui.UiEvent
+import com.ps.movies.ui.details.viewModel.MovieDetailState
+import com.ps.movies.ui.details.viewModel.MoviesDetailViewModel
 import io.mockk.coEvery
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk

@@ -1,4 +1,4 @@
-package com.ps.movies.feature.list.viewModel
+package com.ps.movies.ui.list.viewModel
 
 import com.ps.domain.modal.MovieListResponse
 

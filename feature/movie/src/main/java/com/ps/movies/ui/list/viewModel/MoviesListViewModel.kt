@@ -1,10 +1,10 @@
-package com.ps.movies.feature.list.viewModel
+package com.ps.movies.ui.list.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.domain.usecase.MovieListUseCase
 import com.ps.domain.utils.NetworkResponse
-import com.ps.movies.feature.UiEvent
+import com.ps.movies.ui.UiEvent
 import com.ps.movies.util.Constants.SERVER_ERROR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

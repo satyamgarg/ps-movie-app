@@ -1,4 +1,4 @@
-package com.ps.movies.feature.list
+package com.ps.movies.ui.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,11 +19,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieResult
 import com.ps.movies.R
-import com.ps.movies.feature.UiEvent
-import com.ps.movies.feature.common.MovieAppBar
-import com.ps.movies.feature.common.MovieBanner
-import com.ps.movies.feature.list.viewModel.MovieListState
-import com.ps.movies.feature.list.viewModel.MoviesListViewModel
+import com.ps.movies.ui.UiEvent
+import com.ps.movies.ui.common.MovieAppBar
+import com.ps.movies.ui.common.MovieBanner
+import com.ps.movies.ui.list.viewModel.MovieListState
+import com.ps.movies.ui.list.viewModel.MoviesListViewModel
 import com.ps.movies.util.Constants
 import com.ps.movies.util.TestTags
 

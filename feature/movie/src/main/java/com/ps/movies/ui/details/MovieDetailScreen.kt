@@ -1,4 +1,4 @@
-package com.ps.movies.feature.details
+package com.ps.movies.ui.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,11 +24,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ps.domain.modal.MovieDetailResponse
 import com.ps.movies.R
-import com.ps.movies.feature.UiEvent
-import com.ps.movies.feature.common.MovieAppBar
-import com.ps.movies.feature.common.MovieBanner
-import com.ps.movies.feature.details.viewModel.MovieDetailState
-import com.ps.movies.feature.details.viewModel.MoviesDetailViewModel
+import com.ps.movies.ui.UiEvent
+import com.ps.movies.ui.common.MovieAppBar
+import com.ps.movies.ui.common.MovieBanner
+import com.ps.movies.ui.details.viewModel.MovieDetailState
+import com.ps.movies.ui.details.viewModel.MoviesDetailViewModel
 import com.ps.movies.util.Constants
 import com.ps.movies.util.TestTags
 import com.ps.movies.util.safeDouble

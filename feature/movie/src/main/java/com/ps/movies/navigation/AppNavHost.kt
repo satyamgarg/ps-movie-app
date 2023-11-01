@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ps.movies.feature.details.MovieDetailScreen
-import com.ps.movies.feature.list.MovieListScreen
+import com.ps.movies.ui.details.MovieDetailScreen
+import com.ps.movies.ui.list.MovieListScreen
 import com.ps.movies.util.Constants
 
 @Composable

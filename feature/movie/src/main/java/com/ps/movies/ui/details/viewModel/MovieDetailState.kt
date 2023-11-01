@@ -1,4 +1,4 @@
-package com.ps.movies.feature.details.viewModel
+package com.ps.movies.ui.details.viewModel
 
 import com.ps.domain.modal.MovieDetailResponse
 

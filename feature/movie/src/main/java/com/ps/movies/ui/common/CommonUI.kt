@@ -1,4 +1,4 @@
-package com.ps.movies.feature.common
+package com.ps.movies.ui.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
