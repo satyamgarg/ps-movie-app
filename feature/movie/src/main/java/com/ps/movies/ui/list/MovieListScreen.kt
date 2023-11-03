@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ps.domain.modal.MovieResult
+import com.ps.domain.modal.MovieResultDomainModel
 import com.ps.movies.R
 import com.ps.movies.ui.UiEvent
 import com.ps.movies.ui.common.MovieAppBar
@@ -73,7 +73,7 @@ fun MovieListScreen(
 }
 
 @Composable
-fun DisplayMovieList(results: List<MovieResult>, onMovieClick: (Int) -> Unit) {
+fun DisplayMovieList(results: List<MovieResultDomainModel>, onMovieClick: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()

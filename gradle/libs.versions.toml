@@ -13,8 +13,8 @@ kotlinKsp = "1.9.10-1.0.13"
 coreKtx = "1.12.0"
 activityCompose = "1.8.0"
 composeNavigation = "2.7.4"
-composeBOM = "2023.10.00"
-kotlinBOM = "1.9.10"
+composeBOM = "2023.10.01"
+kotlinBOM = "1.9.20"
 androidXLifecycle = "2.6.2"
 androidMaterial3 = "1.1.2"
 hiltAndroid = "2.48.1"
@@ -23,21 +23,19 @@ okHttp3 = "4.11.0"
 moshi = "1.15.0"
 javaxInject = "1"
 hiltNavigation = "1.0.0"
-glide = "2.1.0"
+glide = "2.2.10"
 
 # Testing Library Version
-junit4 = "1.5.3"
 junit = "4.13.2"
 junitExtension = "1.1.5"
 espressoCore = "3.5.1"
-mockTest = "1.13.4"
-coroutinesTest = "1.6.4"
-coretesting = "2.1.0"
-daggerHilt = "2.48"
+mockTest = "1.13.7"
+coroutinesTest = "1.7.3"
+coretesting = "2.2.0"
+daggerHilt = "2.48.1"
 testTurbine = "0.12.1"
 appcompat = "1.6.1"
 material = "1.10.0"
-constraintlayout = "2.1.4"
 
 [libraries]
 # Android Core
@@ -71,26 +69,22 @@ moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.re
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
 # Other
-image-glide = {module = "com.github.skydoves:landscapist-glide", version.ref = "glide"}
+image-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "glide" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
 
 # Testing
 test-junit = { module = "junit:junit", version.ref = "junit" }
 test-junitExtension = { module = "androidx.test.ext:junit", version.ref = "junitExtension" }
-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-test-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "junit4" }
 test-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 test-compose-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-test-dagger-hilt = {module = "com.google.dagger:hilt-android-testing", version.ref = "daggerHilt"}
-test-mock = {module = "io.mockk:mockk", version.ref = "mockTest"}
-test-coroutines = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest"}
-test-core = {module = "androidx.arch.core:core-testing", version.ref = "coretesting"}
-test-hilt-android = {module = "com.google.dagger:hilt-android-testing", version.ref = "daggerHilt"}
-test-hilt-android-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt"}
-test-turbine = {module = " app.cash.turbine:turbine", version.ref = "testTurbine"}
+test-dagger-hilt = { module = "com.google.dagger:hilt-android-testing", version.ref = "daggerHilt" }
+test-mock = { module = "io.mockk:mockk", version.ref = "mockTest" }
+test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+test-core = { module = "androidx.arch.core:core-testing", version.ref = "coretesting" }
+test-hilt-android = { module = "com.google.dagger:hilt-android-testing", version.ref = "daggerHilt" }
+test-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [bundles]
 androidx-compose-bom = ["compose-bom", "ui-tooling", "compose-ui", "compose-ui-graphics", "compose-tooling-preview", "androidx-material3"]

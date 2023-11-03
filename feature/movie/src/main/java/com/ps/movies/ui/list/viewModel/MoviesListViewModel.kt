@@ -3,7 +3,7 @@ package com.ps.movies.ui.list.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.domain.usecase.MovieListUseCase
-import com.ps.domain.utils.NetworkResponse
+import com.ps.domain.utils.Result
 import com.ps.movies.ui.UiEvent
 import com.ps.movies.util.Constants.SERVER_ERROR
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,15 +33,15 @@ class MoviesListViewModel @Inject constructor(
     private fun getMoviesList() {
         viewModelScope.launch {
             when (val response = movieListUseCase.invoke()) {
-                is NetworkResponse.Success -> {
+                is Result.Success -> {
                     _moviesListState.emit(MovieListState.OnMovieListSuccess(response.data))
                 }
 
-                is NetworkResponse.Error -> {
+                is Result.Error -> {
                     _moviesListState.emit(MovieListState.OnMovieListFailure(SERVER_ERROR))
                 }
 
-                is NetworkResponse.Exception -> {
+                is Result.Exception -> {
                     _moviesListState.emit(MovieListState.OnMovieListFailure(SERVER_ERROR))
                 }
 

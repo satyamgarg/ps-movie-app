@@ -1,5 +1,5 @@
 package com.ps.domain.mapper
 
-interface Mapper<T> {
-    fun mapToDomain(): T
+interface Mapper<D, T> {
+    fun mapToDomain(dataModel: D): T
 }

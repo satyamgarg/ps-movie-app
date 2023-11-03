@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.domain.usecase.MovieDetailsUseCase
-import com.ps.domain.utils.NetworkResponse
+import com.ps.domain.utils.Result
 import com.ps.movies.ui.UiEvent
 import com.ps.movies.util.Constants.MOVIE_ID
 import com.ps.movies.util.Constants.SERVER_ERROR
@@ -42,16 +42,16 @@ class MoviesDetailViewModel @Inject constructor(
     private fun getMovieDetails(movieId: String) {
         viewModelScope.launch {
             when (val response = movieDetailsUseCase.invoke(movieId = movieId)) {
-                is NetworkResponse.Success -> {
+                is Result.Success -> {
                     _movieDetailsTitleState.value = response.data.title
                     _movieDetailsState.emit(MovieDetailState.OnMovieDetailSuccess(response.data))
                 }
 
-                is NetworkResponse.Error -> {
+                is Result.Error -> {
                     _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(response.errorMessage))
                 }
 
-                is NetworkResponse.Exception -> {
+                is Result.Exception -> {
                     _movieDetailsState.emit(MovieDetailState.OnMovieDetailFailure(SERVER_ERROR))
                 }
             }

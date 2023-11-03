@@ -1,9 +1,6 @@
 package com.ps.data.dto
 
 import androidx.annotation.Keep
-import com.ps.data.utils.Constants
-import com.ps.domain.mapper.Mapper
-import com.ps.domain.modal.MovieDetailResponse
 import com.squareup.moshi.Json
 
 @Keep
@@ -21,7 +18,7 @@ data class MovieDetailResponseDto(
     @field:Json(name = "budget")
     val budget: Long? = null,
 
-    @field:Json(name = "genres")
+    @field:Json(name = "genreDomainModels")
     val genres: List<GenreDto?>? = null,
 
     @field:Json(name = "homepage")
@@ -84,18 +81,4 @@ data class MovieDetailResponseDto(
     @Json(name = "vote_count")
     val voteCount: Long? = null,
 
-) : Mapper<MovieDetailResponse> {
-    override fun mapToDomain(): MovieDetailResponse {
-        return MovieDetailResponse(
-            id = id,
-            title = title ?: Constants.EMPTY_STRING,
-            backdropPath = backdropPath,
-            genres = genres?.map { it?.mapToDomain() },
-            overview = overview ?: Constants.EMPTY_STRING,
-            posterPath = posterPath,
-            productionCompanies = productionCompanies?.map { it?.mapToDomain() },
-            voteAverage = voteAverage,
-            voteCount = voteCount,
-        )
-    }
-}
+)

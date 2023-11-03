@@ -49,7 +49,6 @@ dependencies {
     implementation(platform(libs.kotlin.bom))
 
     implementation(libs.core.ktx)
-    implementation(libs.activity.compose)
     implementation(libs.compose.navigation)
     implementation(libs.compose.lifecycle)
     implementation(libs.androidx.lifecycle)
@@ -58,7 +57,6 @@ dependencies {
     implementation(libs.hilt.navigation)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.constraintlayout)
     ksp(libs.hilt.compiler)
 
     implementation(libs.image.glide)
@@ -68,12 +66,7 @@ dependencies {
 
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junit)
-    testImplementation(libs.test.turbine)
-    androidTestImplementation(libs.test.espresso)
     androidTestImplementation(libs.test.junitExtension)
-    androidTestImplementation(libs.test.compose.ui.test)
-    debugImplementation(libs.test.compose.ui.tooling)
-    debugImplementation(libs.test.compose.manifest)
     androidTestImplementation(libs.test.hilt.android)
     testImplementation(libs.test.mock)
     testImplementation(libs.test.coroutines)

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ps.domain.modal.MovieDetailResponse
+import com.ps.domain.modal.MovieDetailsDomainModel
 import com.ps.movies.R
 import com.ps.movies.ui.UiEvent
 import com.ps.movies.ui.common.MovieAppBar
@@ -77,7 +77,7 @@ fun MovieDetailScreen(onBackPressed: () -> Unit) {
 }
 
 @Composable
-fun DisplayMovieDetails(movie: MovieDetailResponse?) {
+fun DisplayMovieDetails(movie: MovieDetailsDomainModel?) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -108,20 +108,19 @@ fun DisplayMovieDetails(movie: MovieDetailResponse?) {
         ) {
             Text(
                 modifier = Modifier.padding(start = 1.dp),
-                text = movie?.genres?.map { it?.name }.toString(),
+                text = movie?.genres?.map { it.name }.toString(),
                 color = Color.White,
                 fontSize = 12.sp,
             )
         }
 
         Row {
-            val rating = movie?.voteAverage?.safeDouble()
             Text(
                 modifier = Modifier
                     .padding(10.dp)
                     .align(Alignment.CenterVertically)
                     .testTag(TestTags.MOVIE_DETAIL_RATING),
-                text = "${stringResource(id = R.string.rating)}\n $rating",
+                text = "${stringResource(id = R.string.rating)}\n ${movie?.voteAverage?.safeDouble()}",
                 color = Color.White,
             )
 
@@ -135,19 +134,17 @@ fun DisplayMovieDetails(movie: MovieDetailResponse?) {
             )
         }
 
-        if (movie?.productionCompanies?.isNotEmpty() == true) {
-            Text(
-                modifier = Modifier.padding(start = 10.dp, top = 10.dp, end = 10.dp),
-                text = stringResource(id = R.string.production_company),
-                color = Color.Yellow,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
-        }
+        Text(
+            modifier = Modifier.padding(start = 10.dp, top = 10.dp, end = 10.dp),
+            text = stringResource(id = R.string.production_company),
+            color = Color.Yellow,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
         movie?.productionCompanies?.forEach { company ->
             Text(
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp),
-                text = "${stringResource(id = R.string.hash_tag)} ${company?.name}",
+                text = "${stringResource(id = R.string.hash_tag)} ${company.name}",
                 color = Color.White,
             )
         }

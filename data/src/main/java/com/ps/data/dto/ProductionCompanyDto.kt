@@ -1,7 +1,5 @@
 package com.ps.data.dto
 
-import com.ps.domain.mapper.Mapper
-import com.ps.domain.modal.ProductionCompany
 import com.squareup.moshi.Json
 
 data class ProductionCompanyDto(
@@ -17,6 +15,4 @@ data class ProductionCompanyDto(
     @Json(name = "origin_country")
     val originCountry: String?,
 
-) : Mapper<ProductionCompany> {
-    override fun mapToDomain(): ProductionCompany = ProductionCompany(id, logoPath, name, originCountry)
-}
+)

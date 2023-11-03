@@ -2,16 +2,14 @@ package com.ps.movies.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
-import com.ps.domain.modal.MovieDetailResponse
+import com.ps.domain.modal.MovieDetailsDomainModel
 import com.ps.domain.usecase.MovieDetailsUseCase
-import com.ps.domain.utils.Constants
-import com.ps.domain.utils.NetworkResponse
+import com.ps.domain.utils.Result
 import com.ps.movies.core.CoroutineRule
 import com.ps.movies.ui.UiEvent
 import com.ps.movies.ui.details.viewModel.MovieDetailState
 import com.ps.movies.ui.details.viewModel.MoviesDetailViewModel
 import io.mockk.coEvery
-import io.mockk.junit4.MockKRule
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -21,7 +19,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MovieDetailsViewModelTest {
+class MovieDetailsViewModelTestDomainModel {
 
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
@@ -31,12 +29,16 @@ class MovieDetailsViewModelTest {
 
     private lateinit var viewModel: MoviesDetailViewModel
 
-    @get:Rule
-    val mockkRule = MockKRule(this)
-
     private val movieDetailsUseCase: MovieDetailsUseCase = mockk()
 
-    private val savedState = SavedStateHandle(mapOf("movieId" to "1"))
+    companion object {
+        private const val MOVIE_ID = "1"
+        private const val MOVIE_KEY = "movieId"
+        private const val EMPTY_LIST = "Empty list"
+        private const val EMPTY_STRING = ""
+    }
+
+    private val savedState = SavedStateHandle(mapOf(MOVIE_KEY to MOVIE_ID))
 
     @Before
     fun setUp() {
@@ -46,8 +48,8 @@ class MovieDetailsViewModelTest {
     @Test
     fun `fetch movie detail loading success test`() {
         coEvery {
-            movieDetailsUseCase("1")
-        } returns NetworkResponse.Success(MovieDetailResponse())
+            movieDetailsUseCase(MOVIE_ID)
+        } returns Result.Success(MovieDetailsDomainModel())
 
         runTest {
             viewModel.onEvent(UiEvent.InitState)
@@ -58,8 +60,8 @@ class MovieDetailsViewModelTest {
     @Test
     fun `fetch movie detail error failure test`() {
         coEvery {
-            movieDetailsUseCase("1")
-        } returns NetworkResponse.Error(errorMessage = Constants.EMPTY_LIST)
+            movieDetailsUseCase(MOVIE_ID)
+        } returns Result.Error(errorMessage = EMPTY_STRING)
 
         runTest {
             viewModel.onEvent(UiEvent.InitState)
@@ -70,8 +72,8 @@ class MovieDetailsViewModelTest {
     @Test
     fun `fetch movie detail exception failure test`() {
         coEvery {
-            movieDetailsUseCase("1")
-        } returns NetworkResponse.Exception(Exception(Constants.EMPTY_LIST))
+            movieDetailsUseCase(MOVIE_ID)
+        } returns Result.Exception(Exception(EMPTY_LIST))
 
         runTest {
             viewModel.onEvent(UiEvent.InitState)
