@@ -19,7 +19,7 @@ class MovieListRepositoryImpl @Inject constructor(
                 movieService.getMoviesList()
             },
             dataMapper = {
-                movieListMapper.mapToDomain(it)
+                movieListMapper(it)
             },
         )
 }

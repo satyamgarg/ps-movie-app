@@ -10,16 +10,10 @@ import org.junit.Before
 import org.junit.Test
 import java.net.UnknownHostException
 
-class MovieDetailsUseCaseTestDomainModel {
+class MovieDetailsUseCaseTest {
 
     private val movieDetailRepository: MovieDetailRepository = mockk()
     private lateinit var movieDetailsUseCase: MovieDetailsUseCase
-
-    companion object {
-        private const val MOVIE_ID = "1"
-        private const val UNKNOWN_ERROR = "Unknown error"
-        private const val EMPTY_LIST = "Empty list"
-    }
 
     @Before
     fun setUp() {
@@ -59,5 +53,11 @@ class MovieDetailsUseCaseTestDomainModel {
         runTest {
             assert(movieDetailsUseCase(MOVIE_ID) is Result.Exception)
         }
+    }
+
+    private companion object {
+        const val MOVIE_ID = "1"
+        const val UNKNOWN_ERROR = "Unknown error"
+        const val EMPTY_LIST = "Empty list"
     }
 }

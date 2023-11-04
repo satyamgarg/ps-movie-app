@@ -5,4 +5,5 @@ object Constants {
     internal const val MOVIE_ID = "movieId"
     internal const val SERVER_ERROR = "Something went wrong. Please try again later."
     internal const val MESSAGE_LOADING = "Loading details. Please wait..."
+    internal const val EMPTY_STRING = ""
 }

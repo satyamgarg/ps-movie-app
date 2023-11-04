@@ -28,11 +28,6 @@ class MovieDetailsRepositoryImplTest {
 
     private val mockkMovieDetailsDataToDomainMapper = mockk<MovieDetailsDataToDomainMapper>()
 
-    companion object {
-        const val MOVIE_ID = "1"
-        const val SERVER_ERROR = "Server not responding"
-    }
-
     @Before
     fun setUp() {
         movieDetailRepository =
@@ -54,7 +49,7 @@ class MovieDetailsRepositoryImplTest {
         } returns mockMovieDetailResponseDto
 
         every {
-            mockkMovieDetailsDataToDomainMapper.mapToDomain(mockHttpMovieDetailResponseDto.body()!!)
+            mockkMovieDetailsDataToDomainMapper(mockHttpMovieDetailResponseDto.body()!!)
         } returns mockMovieDetailResponse
 
         coEvery {
@@ -119,5 +114,10 @@ class MovieDetailsRepositoryImplTest {
             val result = movieDetailRepository.getMovieDetails(MOVIE_ID)
             assert(result is Result.Exception)
         }
+    }
+
+    private companion object {
+        const val MOVIE_ID = "1"
+        const val SERVER_ERROR = "Server not responding"
     }
 }

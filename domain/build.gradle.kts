@@ -34,9 +34,9 @@ android {
 }
 
 dependencies {
-    api(libs.core.ktx)
-    api(libs.hilt.android)
-    api(libs.hilt.navigation)
+    implementation(libs.core.ktx)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation)
 
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junit)

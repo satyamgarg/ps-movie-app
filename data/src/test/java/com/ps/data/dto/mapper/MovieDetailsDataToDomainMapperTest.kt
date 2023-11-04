@@ -9,6 +9,7 @@ import com.ps.data.mapper.ProductionCompaniesDataToDomainMapper
 import com.ps.domain.modal.GenreDomainModel
 import com.ps.domain.modal.MovieDetailsDomainModel
 import com.ps.domain.modal.ProductionCompanyDomainModel
+import io.mockk.mockk
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
@@ -22,33 +23,21 @@ class MovieDetailsDataToDomainMapperTest {
         productionCompaniesDataToDomainMapper,
     )
 
-    companion object {
-        private const val ID = 10
-        private const val TITLE = "title"
-        private const val TITLE_OTHER = "title_other"
-        private const val BACKDROP_PATH = "/path"
-        private const val OVERVIEW = "overview"
-        private const val POSTER_PATH = "poster_path"
-        private const val VOTE_AVERAGE = 3.0
-        private const val VOTE_COUNT = 5460L
-        private const val GENRE_ID = 1
-        private const val GENRE_NAME = "G1"
-        private const val PRODUCTION_COMPANY_ID = 11
-        private const val PRODUCTION_COMPANY_NAME = "name"
-        private const val PRODUCTION_COMPANY_ORIGIN_COUNTRY = "us"
-        private const val PRODUCTION_COMPANY_LOGO_PATH = "logo"
-    }
-
     @Test
-    fun `movie detail response dto to domain data model conversion success test`() {
+    fun `movie detail response  test conversion  dto to domain data model success test`() {
         val movieDetailResponseDto = MovieDetailResponseDto(
-            id = ID,
-            title = TITLE,
+            adult = ADULT,
             backdropPath = BACKDROP_PATH,
-            genres = listOf(
-                GenreDto(GENRE_ID, GENRE_NAME),
-            ),
+            belongsToCollection = mockk(),
+            budget = BUDGET,
+            genres = listOf(GenreDto(GENRE_ID, GENRE_NAME)),
+            homepage = HOME_PAGE,
+            id = ID,
+            imdbId = IMDB_ID,
+            originalLanguage = ORIGINAL_LANGUAGE,
+            originalTitle = ORIGINAL_TITLE,
             overview = OVERVIEW,
+            popularity = POPULARITY,
             posterPath = POSTER_PATH,
             productionCompanies = listOf(
                 ProductionCompanyDto(
@@ -58,11 +47,21 @@ class MovieDetailsDataToDomainMapperTest {
                     originCountry = PRODUCTION_COMPANY_ORIGIN_COUNTRY,
                 ),
             ),
+            productionCountries = listOf(),
+            releaseDate = RELEASE_DATE,
+            revenue = REVENUE,
+            runtime = RUNTIME,
+            spokenLanguages = listOf(),
+            status = STATUS,
+            tagline = TAGLINE,
+            title = TITLE,
+            video = VIDEO,
             voteAverage = VOTE_AVERAGE,
             voteCount = VOTE_COUNT,
         )
+
         val movieDetailResponseDtoDomainMock =
-            movieDetailsDataToDomainMapper.mapToDomain(movieDetailResponseDto)
+            movieDetailsDataToDomainMapper(movieDetailResponseDto)
 
         val movieDetailResponse = MovieDetailsDomainModel(
             id = ID,
@@ -72,7 +71,6 @@ class MovieDetailsDataToDomainMapperTest {
                 GenreDomainModel(GENRE_ID, GENRE_NAME),
             ),
             overview = OVERVIEW,
-            posterPath = POSTER_PATH,
             productionCompanies = listOf(
                 ProductionCompanyDomainModel(
                     name = PRODUCTION_COMPANY_NAME,
@@ -88,15 +86,20 @@ class MovieDetailsDataToDomainMapperTest {
     }
 
     @Test
-    fun `movie detail response dto to domain data model conversion failure test`() {
+    fun `movie detail response test conversion failure when title cannot be converted`() {
         val movieDetailResponseDto = MovieDetailResponseDto(
-            id = ID,
-            title = TITLE,
+            adult = ADULT,
             backdropPath = BACKDROP_PATH,
-            genres = listOf(
-                GenreDto(GENRE_ID, GENRE_NAME),
-            ),
+            belongsToCollection = mockk(),
+            budget = BUDGET,
+            genres = listOf(GenreDto(GENRE_ID, GENRE_NAME)),
+            homepage = HOME_PAGE,
+            id = ID,
+            imdbId = IMDB_ID,
+            originalLanguage = ORIGINAL_LANGUAGE,
+            originalTitle = ORIGINAL_TITLE,
             overview = OVERVIEW,
+            popularity = POPULARITY,
             posterPath = POSTER_PATH,
             productionCompanies = listOf(
                 ProductionCompanyDto(
@@ -106,11 +109,20 @@ class MovieDetailsDataToDomainMapperTest {
                     originCountry = PRODUCTION_COMPANY_ORIGIN_COUNTRY,
                 ),
             ),
+            productionCountries = listOf(),
+            releaseDate = RELEASE_DATE,
+            revenue = REVENUE,
+            runtime = RUNTIME,
+            spokenLanguages = listOf(),
+            status = STATUS,
+            tagline = TAGLINE,
+            title = TITLE,
+            video = VIDEO,
             voteAverage = VOTE_AVERAGE,
             voteCount = VOTE_COUNT,
         )
         val movieDetailResponseDtoDomain =
-            movieDetailsDataToDomainMapper.mapToDomain(movieDetailResponseDto)
+            movieDetailsDataToDomainMapper(movieDetailResponseDto)
 
         val movieDetailResponse = MovieDetailsDomainModel(
             id = ID,
@@ -120,7 +132,6 @@ class MovieDetailsDataToDomainMapperTest {
                 GenreDomainModel(GENRE_ID, GENRE_NAME),
             ),
             overview = OVERVIEW,
-            posterPath = POSTER_PATH,
             productionCompanies = listOf(
                 ProductionCompanyDomainModel(
                     id = PRODUCTION_COMPANY_ID,
@@ -136,5 +147,35 @@ class MovieDetailsDataToDomainMapperTest {
             movieDetailResponseDtoDomain.hashCode() ==
                 movieDetailResponse.hashCode(),
         )
+    }
+
+    private companion object {
+        const val ADULT = false
+        const val BACKDROP_PATH = "backdrop_path"
+        const val BUDGET = 123L
+        const val GENRE_ID = 1
+        const val GENRE_NAME = "genre_name"
+        const val HOME_PAGE = "home_page"
+        const val ID = 123
+        const val IMDB_ID = "imdb_id"
+        const val ORIGINAL_LANGUAGE = "original_language"
+        const val ORIGINAL_TITLE = "original_title"
+        const val OVERVIEW = "overview"
+        const val POPULARITY = 123.1
+        const val POSTER_PATH = "poster_path"
+        const val PRODUCTION_COMPANY_ID = 1
+        const val PRODUCTION_COMPANY_LOGO_PATH = "production_company_logo_path"
+        const val PRODUCTION_COMPANY_NAME = "production_company_name"
+        const val PRODUCTION_COMPANY_ORIGIN_COUNTRY = "production_company_origin_country"
+        const val RELEASE_DATE = "release_date"
+        const val REVENUE = 123L
+        const val RUNTIME = 123
+        const val STATUS = "status"
+        const val TAGLINE = "tagline"
+        const val TITLE = "title"
+        const val TITLE_OTHER = "title_other"
+        const val VIDEO = false
+        const val VOTE_AVERAGE = 2.3
+        const val VOTE_COUNT = 123L
     }
 }

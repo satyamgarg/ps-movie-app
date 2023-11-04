@@ -20,7 +20,7 @@ class MovieDetailRepositoryImpl @Inject constructor(
                 movieService.getMovieDetails(movieId)
             },
             dataMapper = {
-                movieDetailsMapper.mapToDomain(it)
+                movieDetailsMapper(it)
             },
         )
 }

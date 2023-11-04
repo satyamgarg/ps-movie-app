@@ -31,13 +31,6 @@ class MovieDetailsViewModelTestDomainModel {
 
     private val movieDetailsUseCase: MovieDetailsUseCase = mockk()
 
-    companion object {
-        private const val MOVIE_ID = "1"
-        private const val MOVIE_KEY = "movieId"
-        private const val EMPTY_LIST = "Empty list"
-        private const val EMPTY_STRING = ""
-    }
-
     private val savedState = SavedStateHandle(mapOf(MOVIE_KEY to MOVIE_ID))
 
     @Before
@@ -79,5 +72,12 @@ class MovieDetailsViewModelTestDomainModel {
             viewModel.onEvent(UiEvent.InitState)
             assert(viewModel.movieDetailsState.value is MovieDetailState.OnMovieDetailFailure)
         }
+    }
+
+    private companion object {
+        const val MOVIE_ID = "1"
+        const val MOVIE_KEY = "movieId"
+        const val EMPTY_LIST = "Empty list"
+        const val EMPTY_STRING = ""
     }
 }

@@ -49,12 +49,12 @@ android {
 
 dependencies {
     implementation(projects.domain)
-    api(libs.core.ktx)
-    api(libs.hilt.android)
+    implementation(libs.core.ktx)
+    implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    api(libs.hilt.navigation)
-    api(libs.moshi.kotlin)
-    api(libs.bundles.retrofit)
+    implementation(libs.hilt.navigation)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.bundles.retrofit)
     ksp(libs.moshi.codegen)
 
     testImplementation(libs.test.junit)

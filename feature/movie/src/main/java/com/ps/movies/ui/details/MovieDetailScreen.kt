@@ -46,7 +46,7 @@ fun MovieDetailScreen(onBackPressed: () -> Unit) {
     Scaffold(
         topBar = {
             MovieAppBar(
-                title = movieDetailsTitle.toString(),
+                title = movieDetailsTitle,
                 tagName = TestTags.MOVIE_DETAIL_BACK_BUTTON,
                 isBackEnabled = true,
                 onBackClick = { onBackPressed.invoke() },
@@ -69,7 +69,7 @@ fun MovieDetailScreen(onBackPressed: () -> Unit) {
                 }
 
                 is MovieDetailState.OnMovieDetailFailure -> {
-                    Text(modifier = Modifier.padding(10.dp), text = state.message.toString())
+                    Text(modifier = Modifier.padding(10.dp), text = state.message)
                 }
             }
         }
@@ -77,7 +77,7 @@ fun MovieDetailScreen(onBackPressed: () -> Unit) {
 }
 
 @Composable
-fun DisplayMovieDetails(movie: MovieDetailsDomainModel?) {
+fun DisplayMovieDetails(movie: MovieDetailsDomainModel) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -87,20 +87,18 @@ fun DisplayMovieDetails(movie: MovieDetailsDomainModel?) {
         MovieBanner(
             modifier = Modifier.height(300.dp),
             testTag = TestTags.MOVIE_DETAIL_IMAGE,
-            imagePath = "${Constants.IMAGE_URL}${movie?.backdropPath.orEmpty()}",
+            imagePath = "${Constants.IMAGE_URL}${movie.backdropPath}",
         )
 
-        if (movie?.genres?.isNotEmpty() == true) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 10.dp, top = 10.dp, end = 10.dp)
-                    .testTag(TestTags.MOVIE_DETAIL_GENRE),
-                text = stringResource(id = R.string.genre),
-                color = Color.Yellow,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
-        }
+        Text(
+            modifier = Modifier
+                .padding(10.dp)
+                .testTag(TestTags.MOVIE_DETAIL_GENRE),
+            text = stringResource(id = R.string.genre),
+            color = Color.Yellow,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
         Row(
             modifier = Modifier
                 .wrapContentHeight()
@@ -108,7 +106,7 @@ fun DisplayMovieDetails(movie: MovieDetailsDomainModel?) {
         ) {
             Text(
                 modifier = Modifier.padding(start = 1.dp),
-                text = movie?.genres?.map { it.name }.toString(),
+                text = movie.genres.map { it.name }.toString(),
                 color = Color.White,
                 fontSize = 12.sp,
             )
@@ -120,11 +118,11 @@ fun DisplayMovieDetails(movie: MovieDetailsDomainModel?) {
                     .padding(10.dp)
                     .align(Alignment.CenterVertically)
                     .testTag(TestTags.MOVIE_DETAIL_RATING),
-                text = "${stringResource(id = R.string.rating)}\n ${movie?.voteAverage?.safeDouble()}",
+                text = "${stringResource(id = R.string.rating)}\n ${movie.voteAverage.safeDouble()}",
                 color = Color.White,
             )
 
-            val voteCount = movie?.voteCount?.safeLong()
+            val voteCount = movie.voteCount.safeLong()
             Text(
                 modifier = Modifier
                     .padding(10.dp)
@@ -141,7 +139,7 @@ fun DisplayMovieDetails(movie: MovieDetailsDomainModel?) {
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
         )
-        movie?.productionCompanies?.forEach { company ->
+        movie.productionCompanies.forEach { company ->
             Text(
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp),
                 text = "${stringResource(id = R.string.hash_tag)} ${company.name}",
@@ -160,7 +158,7 @@ fun DisplayMovieDetails(movie: MovieDetailsDomainModel?) {
             modifier = Modifier
                 .padding(start = 10.dp, bottom = 20.dp, end = 10.dp)
                 .testTag(TestTags.MOVIE_DETAIL_OVERVIEW),
-            text = movie?.overview.orEmpty(),
+            text = movie.overview,
             color = Color.White,
         )
     }

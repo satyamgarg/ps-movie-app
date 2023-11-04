@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ps.domain.usecase.MovieDetailsUseCase
 import com.ps.domain.utils.Result
 import com.ps.movies.ui.UiEvent
+import com.ps.movies.util.Constants
 import com.ps.movies.util.Constants.MOVIE_ID
 import com.ps.movies.util.Constants.SERVER_ERROR
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +26,8 @@ class MoviesDetailViewModel @Inject constructor(
     private val _movieDetailsState = MutableStateFlow<MovieDetailState>(MovieDetailState.Loading)
     val movieDetailsState: StateFlow<MovieDetailState> = _movieDetailsState
 
-    private val _movieDetailsTitleState =
-        mutableStateOf<String?>(null)
-    val movieDetailsTitleState: State<String?> = _movieDetailsTitleState
+    private val _movieDetailsTitleState = mutableStateOf(Constants.EMPTY_STRING)
+    val movieDetailsTitleState: State<String> = _movieDetailsTitleState
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {

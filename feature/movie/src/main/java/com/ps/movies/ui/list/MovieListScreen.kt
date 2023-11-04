@@ -42,7 +42,6 @@ fun MovieListScreen(
                 title = stringResource(id = R.string.movie_list),
                 tagName = TestTags.MOVIE_LIST_TITLE,
                 isBackEnabled = false,
-                onBackClick = {},
             )
         },
     ) { paddingValues ->
@@ -56,12 +55,10 @@ fun MovieListScreen(
                 }
 
                 is MovieListState.OnMovieListSuccess -> {
-                    state.response.results.let {
-                        DisplayMovieList(
-                            results = it,
-                            onMovieClick = onMovieClick,
-                        )
-                    }
+                    DisplayMovieList(
+                        results = state.response.results,
+                        onMovieClick = onMovieClick,
+                    )
                 }
 
                 is MovieListState.OnMovieListFailure -> {

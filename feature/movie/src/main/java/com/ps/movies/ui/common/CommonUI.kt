@@ -1,6 +1,5 @@
 package com.ps.movies.ui.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,7 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -66,21 +65,25 @@ fun MovieBanner(
                 CircularProgressIndicator()
             }
         },
+        requestOptions = { RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE) },
         failure = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_downloading),
-                contentDescription = stringResource(
-                    id = R.string.failed_to_load_image,
-                ),
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = stringResource(id = R.string.failed_to_load_image),
+                tint = Color.Black,
             )
         },
-        requestOptions = { RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE) },
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieAppBar(title: String, tagName: String, isBackEnabled: Boolean, onBackClick: () -> Unit) {
+fun MovieAppBar(
+    title: String,
+    tagName: String,
+    isBackEnabled: Boolean,
+    onBackClick: (() -> Unit)? = null,
+) {
     TopAppBar(
         title = {
             DisplayTitle(title)
@@ -88,7 +91,7 @@ fun MovieAppBar(title: String, tagName: String, isBackEnabled: Boolean, onBackCl
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
         navigationIcon = {
             if (isBackEnabled) {
-                IconButton(onClick = onBackClick) {
+                IconButton(onClick = { onBackClick?.invoke() }) {
                     Icon(
                         modifier = Modifier.testTag(tagName),
                         imageVector = Icons.Filled.ArrowBack,

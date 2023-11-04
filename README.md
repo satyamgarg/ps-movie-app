@@ -1,19 +1,18 @@
 # PS Movie App
-Movie app using the The movie database API’s to show popular movies
-currently. The app should display posters of top 10 movies. When user selects a movie from
+Movie app using the The movie database API’s to show popular movies currently. The app display posters of top 10 movies. When user selects a movie from
 the list, the app is showing the details of the selected movie. 
 
 ### Architecture :
 Architecture	        MVI Clean
 This project follows MVI+Clean Architecture pattern which include below modules:
-- Presentation(app)
-- Domain(domain)
-- Data(data)
+- Presentation
+- Domain
+- Data
 
 ### Data Flow between layers :
-1. UI calls method of ViewModel using Channel.
+1. UI calls sends UI events to ViewModel.
 2. ViewModel calls Use case using coroutine.
-3. Use case combines fetch data from Repositories.
+3. Use case fetch data from Repositories.
 4. Repository returns data from a Data Source as a Remote.
 5. Data return back to the UI.
 
@@ -21,7 +20,7 @@ This project follows MVI+Clean Architecture pattern which include below modules:
 * [Kotlin] : Programming language.
 * [Coroutines] : For Asynchronous or non-blocking operations.
 * [Flows] : Data Streaming API which is built on top of Coroutines.
-* [Jetpack Compose : Toolkit for building native UI in a declarative way.
+* [Jetpack Compose] : Toolkit for building native UI in a declarative way.
 * [Retrofit] : Type-safe REST client to consume REST web services.
 * [Hilt] : Dependency injection library.
 * [Glide] : Image Loading
