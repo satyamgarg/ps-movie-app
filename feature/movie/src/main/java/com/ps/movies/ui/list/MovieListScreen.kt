@@ -18,8 +18,8 @@ import com.ps.domain.modal.MovieResultDomainModel
 import com.ps.movies.R
 import com.ps.movies.theme.LocalDimension
 import com.ps.movies.ui.UiEvent
-import com.ps.movies.ui.common.MovieAppBar
-import com.ps.movies.ui.common.MovieBanner
+import com.ps.movies.ui.component.MovieAppBar
+import com.ps.movies.ui.component.MovieBanner
 import com.ps.movies.ui.list.viewModel.MovieListState
 import com.ps.movies.ui.list.viewModel.MoviesListViewModel
 import com.ps.movies.util.Constants
