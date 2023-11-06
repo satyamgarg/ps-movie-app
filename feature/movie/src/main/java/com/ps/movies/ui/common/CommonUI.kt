@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -13,6 +14,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -22,44 +24,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ps.movies.R
-import com.ps.movies.util.TestTags
+import com.ps.movies.theme.LocalDimension
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun MovieBanner(
     modifier: Modifier,
-    testTag: String,
     imagePath: String,
     onMovieClick: (() -> Unit)? = null,
 ) {
+    val localDims = LocalDimension.current
     GlideImage(
-        modifier = modifier
-            .fillMaxWidth(1f)
-            .clip(RoundedCornerShape(size = 5.dp))
-            .clickable {
+        modifier = modifier.height(localDims.size400)
+            .padding(localDims.padding10).fillMaxWidth(1f)
+            .clip(RoundedCornerShape(localDims.size5)).clickable {
                 onMovieClick?.invoke()
-            }
-            .testTag(testTag),
+            },
         imageOptions = ImageOptions(contentScale = ContentScale.FillBounds),
         imageModel = {
             imagePath
         },
         loading = {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.Gray)
-                    .height(300.dp),
+                modifier = Modifier.fillMaxWidth().background(color = Color.Gray)
+                    .height(localDims.size300),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator()
@@ -70,7 +64,7 @@ fun MovieBanner(
             Icon(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = stringResource(id = R.string.failed_to_load_image),
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.error,
             )
         },
     )
@@ -80,9 +74,8 @@ fun MovieBanner(
 @Composable
 fun MovieAppBar(
     title: String,
-    tagName: String,
     isBackEnabled: Boolean,
-    onBackClick: (() -> Unit)? = null,
+    onBackClick: () -> Unit = {},
 ) {
     TopAppBar(
         title = {
@@ -91,12 +84,11 @@ fun MovieAppBar(
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
         navigationIcon = {
             if (isBackEnabled) {
-                IconButton(onClick = { onBackClick?.invoke() }) {
+                IconButton(onClick = { onBackClick.invoke() }) {
                     Icon(
-                        modifier = Modifier.testTag(tagName),
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = stringResource(id = R.string.app_name),
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -107,12 +99,9 @@ fun MovieAppBar(
 @Composable
 fun DisplayTitle(title: String) {
     Text(
-        modifier = Modifier.testTag(TestTags.MOVIE_DETAIL_TITLE),
         text = title.ifEmpty { stringResource(id = R.string.app_name) },
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-        color = Color.White,
-        fontSize = 22.sp,
-        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.headlineMedium,
     )
 }
