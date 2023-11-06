@@ -35,12 +35,8 @@ android {
 
 dependencies {
     implementation(libs.core.ktx)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation)
+    implementation(libs.bundles.hilt)
 
-    testImplementation(libs.test.junit)
-    androidTestImplementation(libs.test.junit)
-    testImplementation(libs.test.mock)
+    testImplementation(libs.bundles.app.test)
     testImplementation(libs.test.coroutines)
-    testImplementation(libs.test.core)
 }

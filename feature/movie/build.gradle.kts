@@ -42,7 +42,6 @@ android {
 }
 
 dependencies {
-
     implementation(projects.domain)
 
     implementation(libs.bundles.androidx.compose.bom)
@@ -53,8 +52,7 @@ dependencies {
     implementation(libs.compose.lifecycle)
     implementation(libs.androidx.lifecycle)
 
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation)
+    implementation(libs.bundles.hilt)
     implementation(libs.appcompat)
     implementation(libs.material)
     ksp(libs.hilt.compiler)
@@ -64,13 +62,8 @@ dependencies {
     implementation(libs.moshi.kotlin)
     ksp(libs.moshi.codegen)
 
-    testImplementation(libs.test.junit)
-    androidTestImplementation(libs.test.junit)
-    androidTestImplementation(libs.test.junitExtension)
-    androidTestImplementation(libs.test.hilt.android)
-    testImplementation(libs.test.mock)
+    testImplementation(libs.bundles.app.test)
     testImplementation(libs.test.coroutines)
-    testImplementation(libs.test.core)
     testImplementation(libs.test.hilt.android)
     kspTest(libs.test.hilt.android.compiler)
 }

@@ -61,7 +61,6 @@ dependencies {
     implementation(projects.domain)
     implementation(projects.data)
     implementation(projects.feature.movie)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation)
+    implementation(libs.bundles.hilt)
     ksp(libs.hilt.compiler)
 }

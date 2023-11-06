@@ -27,7 +27,6 @@ glide = "2.2.10"
 
 # Testing Library Version
 junit = "4.13.2"
-junitExtension = "1.1.5"
 espressoCore = "3.5.1"
 mockTest = "1.13.7"
 coroutinesTest = "1.7.3"
@@ -74,7 +73,6 @@ javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInjec
 
 # Testing
 test-junit = { module = "junit:junit", version.ref = "junit" }
-test-junitExtension = { module = "androidx.test.ext:junit", version.ref = "junitExtension" }
 test-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 test-compose-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 test-dagger-hilt = { module = "com.google.dagger:hilt-android-testing", version.ref = "daggerHilt" }
@@ -89,6 +87,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 [bundles]
 androidx-compose-bom = ["compose-bom", "ui-tooling", "compose-ui", "compose-ui-graphics", "compose-tooling-preview", "androidx-material3"]
 retrofit = ["retrofit", "moshi-converter", "okhttp3", "loggin-interceptor"]
+app-test = ["test-junit", "test-mock", "test-core"]
+hilt = ["hilt-android", "hilt-navigation"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
