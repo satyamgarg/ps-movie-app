@@ -10,17 +10,12 @@ import com.ps.domain.utils.Result
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Response
 import java.net.UnknownHostException
 
-@OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class MovieDetailsRepositoryImplTest {
 
     private lateinit var movieDetailRepository: MovieDetailRepository

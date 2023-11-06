@@ -1,9 +1,7 @@
 package com.ps.data.dto
 
-import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
-@Keep
 data class MovieDetailResponseDto(
 
     @Json(name = "adult")

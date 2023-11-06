@@ -31,7 +31,7 @@ fun ProvideDimens(
     CompositionLocalProvider(LocalDimension provides dimensionSet, content = content)
 }
 
-private val DarkColorScheme = darkColorScheme(
+private val darkColorScheme = darkColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
@@ -42,7 +42,7 @@ private val DarkColorScheme = darkColorScheme(
     error = Color.Gray,
 )
 
-private val LightColorScheme = lightColorScheme(
+private val lightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
@@ -65,8 +65,8 @@ fun MovieDemoAppTheme(
             dynamicDarkColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkColorScheme
+        else -> lightColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

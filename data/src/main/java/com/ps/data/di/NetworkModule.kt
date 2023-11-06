@@ -9,23 +9,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.CacheControl
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class CacheInterceptor
 
     @Provides
     @Singleton
@@ -35,26 +27,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @CacheInterceptor
-    fun provideCacheInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            val response = chain.proceed(chain.request())
-            val cacheControl = CacheControl.Builder().maxAge(1, TimeUnit.DAYS).build()
-            return@Interceptor response.newBuilder()
-                .header(Constants.CACHE_CONTROL, cacheControl.toString())
-                .build()
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, @CacheInterceptor cacheInterceptor: Interceptor): OkHttpClient {
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .also { builder ->
                 if (BuildConfig.DEBUG) {
                     builder.addInterceptor(interceptor = loggingInterceptor)
                 }
-                builder.addNetworkInterceptor(interceptor = cacheInterceptor)
             }
             .build()
     }

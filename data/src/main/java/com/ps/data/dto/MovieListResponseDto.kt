@@ -1,9 +1,7 @@
 package com.ps.data.dto
 
-import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
-@Keep
 data class MovieListResponseDto(
     @Json(name = "page")
     val page: Int,

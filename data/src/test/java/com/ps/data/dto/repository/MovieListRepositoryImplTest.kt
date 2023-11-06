@@ -12,12 +12,9 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Response
 import java.net.UnknownHostException
 
-@RunWith(MockitoJUnitRunner::class)
 class MovieListRepositoryImplTest {
 
     private lateinit var movieListRepository: MovieListRepositoryImpl
