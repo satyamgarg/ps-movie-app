@@ -29,5 +29,3 @@ This project follows MVI+Clean Architecture pattern which include below modules:
 ### Screenshots
 1. Movie List
 ![Screenshot_20231025_145842](https://github.com/satyamgarg/ps-movie-app/assets/3114309/b261deaf-44b8-4071-badf-e7ff00d45f56)
-2. Movie Details
-![Screenshot_20231025_145817](https://github.com/satyamgarg/ps-movie-app/assets/3114309/8c1c50fc-9ae3-4ae7-a02b-a22a348380eb)
